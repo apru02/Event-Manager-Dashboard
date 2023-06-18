@@ -13,8 +13,7 @@ EventManagerDashboard is an open-source web application for efficient event mana
 
 ## Proposed UI Design for the project
  
-
-![Web 1920 – 1](https://github.com/apru02/Event-Manager-Dashboard/assets/105492094/59ee8fa4-e676-4fe4-a129-b65bd2a54a66)
+<img src="https://github.com/apru02/Event-Manager-Dashboard/assets/105492094/59ee8fa4-e676-4fe4-a129-b65bd2a54a66" align ="center" height ="400" width="711.10">
 
 ## License
 
