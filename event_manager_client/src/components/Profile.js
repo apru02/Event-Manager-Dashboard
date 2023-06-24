@@ -3,20 +3,15 @@ import "../App.css";
 import UserNav from "./UserNav";
 import Calendar from "./Calendar";
 import plus from "./logos/plus (1).png";
-import eventContext from "../Context/EventContext";
-import { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import NewEventForm from "./NewEventForm";
 import { useState } from "react"; 
 const Profile = () => {
-  const context = useContext(eventContext);
-  const { events, addEvent } = context;
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  
   const [showForm, setShowForm] = useState(false);
   const handlebtnclick = () => {
     setShowForm(!showForm);
   };
+
   return (
     <div className="part2">
       <UserNav />
