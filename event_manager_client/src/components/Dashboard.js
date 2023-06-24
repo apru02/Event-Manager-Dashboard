@@ -13,11 +13,9 @@ const Dashboard = () => {
   useEffect(() => {
     if (localStorage.getItem("token")) {
       getEvents();
-    }
-    else{
+    } else {
       navigate("/signin");
     }
-
 
     // eslint-disable-next-line
   }, []);
@@ -31,19 +29,25 @@ const Dashboard = () => {
           <h1 className="main_title">Event Dashboard</h1>
           <EventsNav />
           <div className="eventsContainer">
-            {events.map((event) => (
-              <EventsCard
-                key={event._id}
-                title={event.title}
-                startDate={event.eventStartDate}
-                endDate={event.eventEndDate}
-                tags={event.tags}
-                description={event.description}
-                isActive={event.isActive}
-                collaborators={event.collaborators}
-                admin={event.admin}
-              />
-            ))}
+            {events.length === 0 ? (
+              <div className="noEvents">
+                <h1>No Events to show</h1>
+              </div>
+            ) : (
+              events.map((event) => (
+                <EventsCard
+                  key={event._id}
+                  title={event.title}
+                  startDate={event.eventStartDate}
+                  endDate={event.eventEndDate}
+                  tags={event.tags}
+                  description={event.description}
+                  isActive={event.isActive}
+                  collaborators={event.collaborators}
+                  admin={event.admin}
+                />
+              ))
+            )}
           </div>
         </div>
       </div>
