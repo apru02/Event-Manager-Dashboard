@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const connectDB = async () => {
   try {
     // Replace 'your_mongodb_uri' with your actual MongoDB connection string
-    const mongodbURI = 'mongodb://localhost:27017/Event_manager';
+    const mongodbURI = process.env.MONGO_URI;
+
 
     await mongoose.connect(mongodbURI, {
       useNewUrlParser: true,
