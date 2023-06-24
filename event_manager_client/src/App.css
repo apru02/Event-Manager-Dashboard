@@ -420,7 +420,7 @@ hr {
   padding: 10px;
   margin: auto;
   margin-top: 26px;
-  margin-left: 20px;
+
 }
 
 .calendar-header {
@@ -500,8 +500,10 @@ hr {
   display: flex;
   justify-content: center;
   margin-top: auto;
+  width: 72vh;
+  position: absolute;
   margin: auto;
-  margin-top: 22px;
+  margin-top: 92px;
   padding: 12px;
 }
 
