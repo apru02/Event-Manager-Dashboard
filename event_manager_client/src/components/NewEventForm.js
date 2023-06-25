@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../App.css";
 import tagicon from "./logos/tag.png";
 import backicon from "./logos/back.png";
+import groupicon from "./logos/group.png";
 import eventContext from "../Context/EventContext";
 import { useContext } from "react";
 //import { useNavigate } from "react-router-dom";
@@ -10,6 +11,59 @@ const NewEventForm = (props) => {
   const { addEvent } = context;
   const [tags, setTags] = useState([]);
   const maxTags = 10;
+  const [collaborators, setCollaborators] = useState([]);
+  const [currCollaborator, setCurrCollaborator] = useState("");
+  const [promptdisplay, setPromptDisplay] = useState("");
+  const [lastcollaborator, setLastCollaborator] = useState({});
+  const userSearchPrompt = async () => {
+    const response = await fetch(
+      `http://localhost:5000/api/auth/searchuser/${currCollaborator}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    const json = await response.json();
+    if (json.success) {
+      setPromptDisplay(json.users.name);
+      setLastCollaborator(json.users);
+    } else {
+      setPromptDisplay("");
+    }
+  };
+  const oncollabchange = (e) => {
+    setCurrCollaborator(e.target.value);
+    userSearchPrompt();
+  };
+  const handleuserinput = () => {
+    if (
+      lastcollaborator &&
+      !collaborators.some((c) => c._id === lastcollaborator._id)
+    ) {
+      setCollaborators((prevCollaborators) => [
+        ...prevCollaborators,
+        lastcollaborator,
+      ]);
+    }
+  };
+
+  const removeUserTag = (id) => {
+    const updatedCollaborators = collaborators.filter((c) => c._id !== id);
+    setCollaborators(updatedCollaborators);
+  };
+
+  const createTag = () => {
+    const reversedTags = [...tags].reverse();
+    return reversedTags.map((tag, index) => (
+      <li key={index}>
+        {tag}{" "}
+        <i className="uit uit-multiply" onClick={() => removeTag(tag)}></i>
+      </li>
+    ));
+  };
   const [eventDetails, setEventDetails] = useState({
     title: "",
     description: "",
@@ -31,21 +85,13 @@ const NewEventForm = (props) => {
     return tagNumb;
   };
 
-  const createTag = () => {
-    const reversedTags = [...tags].reverse();
-    return reversedTags.map((tag, index) => (
-      <li key={index}>
-        {tag}{" "}
-        <i className="uit uit-multiply" onClick={() => removeTag(tag)}></i>
-      </li>
-    ));
-  };
-
   const removeTag = (tag) => {
     const updatedTags = tags.filter((t) => t !== tag);
     setTags(updatedTags);
   };
-
+  const removeAllCollabs = () => {
+    setCollaborators([]);
+  };
   const addTag = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -67,15 +113,16 @@ const NewEventForm = (props) => {
   const handleFormSubmit = (e) => {
     // Perform any necessary form submission logic here
     e.preventDefault();
+    console.log(collaborators);
     addEvent(
-        eventDetails.title,
-        eventDetails.description,
-        tags,
-        eventDetails.eventStartDate,
-        eventDetails.eventEndDate
+      eventDetails.title,
+      eventDetails.description,
+      tags,
+      eventDetails.eventStartDate,
+      eventDetails.eventEndDate,
+      collaborators
     );
-
-    console.log(tags);
+    window.location.reload();
   };
 
   return (
@@ -144,7 +191,8 @@ const NewEventForm = (props) => {
           </div>
           <div className="content">
             <p>Press enter or add a comma after each tag</p>
-            <ul>{createTag()}</ul>
+            {tags.length > 0 ? <ul>{createTag()}</ul> : " "}
+
             <input type="text" spellCheck="false" onKeyUp={addTag} />
           </div>
           <div className="details">
@@ -152,6 +200,50 @@ const NewEventForm = (props) => {
               <span>{countTags()}</span> tags are remaining
             </p>
             <button onClick={removeAllTags}>Remove All</button>
+          </div>
+        </div>
+        <div className="wrapper">
+          <div className="title">
+            <img src={groupicon} style={{ width: "30px" }} alt="icon" />
+            <h2>Add Collaborators</h2>
+          </div>
+          <div className="content">
+            <p>Enter the username of the person to be added as collaborator</p>
+            {collaborators.length > 0 ? (
+              <ul>
+                {collaborators.map((collaborator) => {
+                  return (
+                    <li key={collaborator._id}>
+                      {collaborator.name}{" "}
+                      <i
+                        className="uit uit-multiply"
+                        onClick={() => removeUserTag(collaborator._id)}
+                      ></i>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              " "
+            )}
+
+            <div className="collabinput">
+              <input type="text" spellCheck="false" onChange={oncollabchange} />
+
+              {promptdisplay !== "" ? (
+                <li
+                  style={{ padding: "3px 5px 3px 10px", cursor: "pointer" }}
+                  onClick={handleuserinput}
+                >
+                  {promptdisplay}
+                </li>
+              ) : (
+                " "
+              )}
+            </div>
+          </div>
+          <div className="details">
+            <button onClick={removeAllCollabs}>Remove All</button>
           </div>
         </div>
 

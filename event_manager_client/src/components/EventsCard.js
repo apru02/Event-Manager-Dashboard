@@ -1,9 +1,28 @@
 import React from "react";
 import "../App.css";
 import Tags from "./Tags";
-import dp1 from "./logos/30.png";
+//import dp1 from "./logos/30.png";
 import edit from "./logos/pencil-2.png";
 const EventsCard = (props) => {
+  // const fetchUserImage = async (user) => {
+  //   const userid = user.toString();
+  //   const response = await fetch(
+  //     `http://localhost:5000/api/auth/getuserdp/${userid}`,
+  //     {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     }
+  //   );
+  //   const json = await response.json();
+
+  //   const filename = json.filename;
+  //   console.log(filename.type);
+  //   const url = `http://localhost:5000/uploads/${filename}`;
+  //   return url;
+  // };
+
   return (
     <div className="card">
       <div className="firstRow">
@@ -17,27 +36,54 @@ const EventsCard = (props) => {
       </div>
       <div className="dates">
         <p className="date" style={{ marginBottom: "0rem" }}>
-         { `${props.startDate} - ${props.endDate}`}
+          {`${props.startDate} - ${props.endDate}`}
         </p>
       </div>
       <div className="secondRow">
         {props.tags.map((tag) => (
-          <Tags title={tag} />
+          <Tags key={tag} title={tag} />
         ))}
       </div>
       <div className="thirdRow">
         <div className="teamRow">
-          <span className="dp">
-            <img className="dp_element" src={dp1} alt="" width="48px" />
-          </span>
-          <span className="dp">
-            <img className="dp_element" src={dp1} alt="" width="48px" />
-          </span>
-          <span className="numbers">
-            {props.collaborators.length > 2
-              ? props.collaborators.length - 2
-              : ""}
-          </span>
+          {props.collaborators.length <= 2 ? (
+            props.collaborators.map((collaborator) => (
+              <span className="dp" key={collaborator._id}>
+                <img
+                  className="dp_element"
+                  src={`http://localhost:5000/uploads/${collaborator.photo}`}
+                  alt="collabs"
+                  onError={(e) => {
+                    e.target.src =
+                      "http://localhost:5000/uploads/defaultUpload.png";
+                  }}
+                  width="48px"
+                />
+              </span>
+            ))
+          ) : (
+            <>
+              {props.collaborators.slice(0, 2).map((collaborator) => (
+                <span className="dp" key={collaborator._id}>
+                  <img
+                    className="dp_element"
+                    src={`http://localhost:5000/uploads/${collaborator.photo}`}
+                    alt="collabs"
+                    onError={(e) => {
+                      e.target.src =
+                        "http://localhost:5000/uploads/defaultUpload.png";
+                    }}
+                    width="48px"
+                  />
+                </span>
+              ))}
+              {props.collaborators.length > 2 && (
+                <span className="numbers">
+                  +{props.collaborators.length - 2}
+                </span>
+              )}
+            </>
+          )}
         </div>
         <span className="edit_btn">
           <img src={edit} alt="edit" width="40px" />

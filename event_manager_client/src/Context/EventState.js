@@ -34,10 +34,25 @@ const EventState = (props) => {
     description,
     tags,
     eventStartDate,
-    eventEndDate
+    eventEndDate,
+    collaborators_array
   ) => {
     // TODO: API Call
     // API Call
+    const collaborators = [];
+    if (collaborators_array.length > 0) {
+      for (let collaborator of collaborators_array) {
+        const item = {
+          _id: collaborator._id,
+          name: collaborator.name,
+          email: collaborator.email,
+          photo: collaborator.photo,
+          username: collaborator.username,
+        };
+        collaborators.push(item);
+      }
+    }
+
     const response = await fetch(`${host}/api/event/createevent`, {
       method: "POST",
       headers: {
@@ -50,11 +65,12 @@ const EventState = (props) => {
         tags,
         eventStartDate,
         eventEndDate,
+        collaborators,
       }),
     });
 
     const event = await response.json();
-    setEvents(events.concat(event));
+    setEvents(events.push(event));
   };
 
   // Delete a Note
@@ -91,7 +107,13 @@ const EventState = (props) => {
         "Content-Type": "application/json",
         "auth-token": authtoken,
       },
-      body: JSON.stringify({title, description, tags, eventStartDate, eventEndDate }),
+      body: JSON.stringify({
+        title,
+        description,
+        tags,
+        eventStartDate,
+        eventEndDate,
+      }),
     });
     const json = await response.json();
     console.log(json);
@@ -122,13 +144,3 @@ const EventState = (props) => {
   );
 };
 export default EventState;
-
-
-
-
-
-
- 
-
-
-

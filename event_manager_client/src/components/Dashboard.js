@@ -29,7 +29,7 @@ const Dashboard = () => {
           <h1 className="main_title">Event Dashboard</h1>
           <EventsNav />
           <div className="eventsContainer">
-            {events.length === 0 ? (
+            {!events ? (
               <div className="noEvents">
                 <h1>No Events to show</h1>
               </div>

@@ -1,19 +1,29 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+const userSchema = new Schema({
+  _id: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+  name: String,
+  email: String,
+  photo: String,
+  username: String,
+});
 
-const taskSchema = new mongoose.Schema({
-    description: {
-      type: String,
-      required: true
-    },
-    completed: {
-      type: Boolean,
-      default: false
-    }
-  });
+const taskSchema = new Schema({
+  description: {
+    type: String,
+    required: true,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-const EventsSchema = new Schema({
+const eventsSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -26,25 +36,16 @@ const EventsSchema = new Schema({
     type: [String],
     required: true,
   },
-  eventStartDate: {
-    type: String,
-    
-  },
-  eventEndDate: {
-    type: String,
-  
-  },
+  eventStartDate: String,
+  eventEndDate: String,
   isActive: {
     type: Boolean,
     default: true,
   },
-  collaborators:{
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "user",
-  },
-  admin:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+  collaborators: [userSchema],
+  admin: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
   tasks: [taskSchema],
   date_created: {
@@ -53,7 +54,5 @@ const EventsSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("events", EventsSchema);
-
-
-
+const EventsModel = mongoose.model("Event", eventsSchema);
+module.exports = EventsModel;

@@ -130,6 +130,7 @@ router.post("/getuser", fetchuser, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
 // Multer Configuration for file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -176,5 +177,32 @@ router.put("/updateuser/:id", fetchuser, async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 });
+
+//Route 6 for prompting Names of user for search using username
+// Assuming you have imported the necessary dependencies and defined the User model
+
+router.get("/searchuser/:username", fetchuser, async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    // Search for users with matching username
+    const users = await User.findOne({ username });
+    if (!users || users._id.toString() === req.user.id.toString()) {
+      return res
+        .status(404)
+        .json({ success: false, error: "No users found" });
+    }
+    // Return the found users in the response
+    res.json({ success: true, users });
+  } catch (error) {
+    // Handle any errors that occur during the search
+    console.error(error);
+    res
+      .status(500)
+      .json({ success:false,error: "An error occurred while searching for users." });
+  }
+});
+//Route for fetching user profile filename based on id
+
 
 module.exports = router;

@@ -730,6 +730,7 @@ hr {
 .wrapper{
   width: 450px;
   background: #fff;
+  margin-bottom: 14px;
   border-radius: 10px;
   padding: 18px 25px 20px;
   box-shadow: 0 0 30px rgba(0,0,0,0.06);
@@ -748,6 +749,7 @@ hr {
 }
 .wrapper .content{
   margin: 10px 0;
+  
 }
 .content p{
   font-size: 15px;
@@ -817,4 +819,19 @@ hr {
 .neweventform{
   overflow-y: scroll;
   height: 86vh;
+}
+.collabinput{
+  /* border: 2px solid grey; */
+  padding: 10px 10px 10px 10px;
+  border-radius: 11px;
+}
+.collabinput input{
+  width: 100%;
+  padding: 2px 5px 2px 10px;
+}
+.collabinput li{
+  background-color: rgba(192, 190, 190, 0.945);
+}
+.collabinput li:hover{
+  background-color: #8a8c90b3;
 }

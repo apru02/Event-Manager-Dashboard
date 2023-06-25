@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import "../App.css"; // Import the CSS file
 import mybg from "./logos/20285469_6187456.svg";
-
-
+import dp from "./logos/user.png";
 const UpdateAccount = () => {
   const token = localStorage.getItem("token");
   const [Name, setName] = useState("");
@@ -31,20 +30,23 @@ const UpdateAccount = () => {
   };
   useEffect(() => {
     getuser();
-    
-     // eslint-disable-next-line
+
+    // eslint-disable-next-line
   }, []);
 
   const changedp = async (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("photo", file); // Update the key to "photo" instead of "file"
-    
-    const response = await fetch(`http://localhost:5000/api/auth/changedp/${userid}`, {
-      method: "PUT",
-      body: formData,
-    });
-    
+
+    const response = await fetch(
+      `http://localhost:5000/api/auth/changedp/${userid}`,
+      {
+        method: "PUT",
+        body: formData,
+      }
+    );
+
     const json = await response.json();
     console.log(json);
     if (json.success) {
@@ -54,20 +56,23 @@ const UpdateAccount = () => {
       setImagesrc(imageUrl);
     }
   };
-  
+
   const updateAcc = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://localhost:5000/api/auth/updateuser/${userid}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "auth-token": token,
-      },
-      body: JSON.stringify({
-        name: Name,
-        email: email,
-      }),
-    });
+    const response = await fetch(
+      `http://localhost:5000/api/auth/updateuser/${userid}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": token,
+        },
+        body: JSON.stringify({
+          name: Name,
+          email: email,
+        }),
+      }
+    );
     const json = await response.json();
     console.log(json);
     if (json.success) {
@@ -88,8 +93,6 @@ const UpdateAccount = () => {
     setEmail(e.target.value);
   };
 
-
-
   // CSS classes using classNames package
   const containerClasses = classNames("signup-container");
   const formClasses = classNames("signup-form");
@@ -102,11 +105,11 @@ const UpdateAccount = () => {
     typedOutElement.classList.add("fade-in");
     illustratedimg.classList.add("fade-in");
   }, []);
- const handleimginput = () => {
+  const handleimginput = () => {
     const imginput = document.getElementById("imginput");
     imginput.click();
-    };
-    
+  };
+
   return (
     <div className="signupgrid">
       <div className="signupillustrator">
@@ -135,14 +138,17 @@ const UpdateAccount = () => {
         <div className={containerClasses}>
           <h2>Welcome to Event Manager dashboard!</h2>
           <div className="my_dp">
-
-          <img
-            src={imagesrc}
-            alt="profile"
-            className="myprofilepic"
-            onClick={handleimginput}
-            
-          />
+            <img
+              src={
+                imagesrc !== ""
+                  ? imagesrc
+                  : dp
+              }
+              alt="profile"
+              
+              className="myprofilepic"
+              onClick={handleimginput}
+            />
           </div>
           <input
             type="file"
@@ -150,7 +156,7 @@ const UpdateAccount = () => {
             style={{ display: "none" }}
             onChange={changedp}
           />
-          <h3 style={{textAlign:"center"}}>Update your account</h3>
+          <h3 style={{ textAlign: "center" }}>Update your account</h3>
 
           <hr className="signupHR"></hr>
           <h4>Your Username : {username}</h4>

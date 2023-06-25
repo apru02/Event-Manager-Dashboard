@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import message from "./logos/mail.png";
 import notifications from "./logos/bell.png";
-import dp from "./logos/30.jpg";
+import dp from "./logos/user.png";
 import Userdetail from "./Userdetail";
 const UserNav = () => {
   const authtoken = localStorage.getItem("token");
