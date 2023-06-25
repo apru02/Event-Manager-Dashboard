@@ -133,7 +133,7 @@ const NewEventForm = (props) => {
         onClick={props.handlebtnclick}
         alt="back"
       />
-      <h2 style={{ paddingLeft: "15px" }}>Create New event</h2>
+      <h2 style={{ paddingLeft: "28px" }}>Create New event</h2>
       <form className="createEvent" onSubmit={(e) => e.preventDefault()}>
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">

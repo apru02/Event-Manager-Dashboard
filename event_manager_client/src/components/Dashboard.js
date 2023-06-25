@@ -6,6 +6,8 @@ import EventsCard from "./EventsCard";
 import eventContext from "../Context/EventContext";
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import EventOpen from "./EventOpen";
 const Dashboard = () => {
   const context = useContext(eventContext);
   const { events, getEvents } = context;
@@ -19,37 +21,46 @@ const Dashboard = () => {
 
     // eslint-disable-next-line
   }, []);
-
+  const [showdashboard, setShowdashboard] = useState(true);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const handleEventsClick = (event) => {
+      setShowdashboard(false);
+      setSelectedEvent(event);
+  };
   return (
     <>
       <div className="part1">
         <Navbar />
-
-        <div className="main_container">
-          <h1 className="main_title">Event Dashboard</h1>
-          <EventsNav />
-          <div className="eventsContainer">
-            {!events ? (
-              <div className="noEvents">
-                <h1>No Events to show</h1>
-              </div>
-            ) : (
-              events.map((event) => (
-                <EventsCard
-                  key={event._id}
-                  title={event.title}
-                  startDate={event.eventStartDate}
-                  endDate={event.eventEndDate}
-                  tags={event.tags}
-                  description={event.description}
-                  isActive={event.isActive}
-                  collaborators={event.collaborators}
-                  admin={event.admin}
-                />
-              ))
-            )}
+        {showdashboard ? (
+          <div className="main_container">
+            <h1 className="main_title">Event Dashboard</h1>
+            <EventsNav />
+            <div className="eventsContainer">
+              {!events ? (
+                <div className="noEvents">
+                  <h1>No Events to show</h1>
+                </div>
+              ) : (
+                events.map((event) => (
+                  <EventsCard
+                    key={event._id}
+                    title={event.title}
+                    startDate={event.eventStartDate}
+                    endDate={event.eventEndDate}
+                    tags={event.tags}
+                    description={event.description}
+                    isActive={event.isActive}
+                    collaborators={event.collaborators}
+                    admin={event.admin}
+                    onclick={handleEventsClick(event)}
+                  />
+                ))
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          <EventOpen event={selectedEvent} />
+        )}
       </div>
     </>
   );

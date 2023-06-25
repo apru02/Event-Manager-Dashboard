@@ -807,14 +807,21 @@ hr {
   background: #2c52ed;
 }
 .createEvent{
-  padding: 10px 15px 5px 15px;
+  padding: 10px 15px 5px 28px;
   height: 77vh;
   
 }
 .backIcon{
-  width: 39px;
-    padding: 10px 0px 10px 15px;
+  width: 43px;
+    padding: 10px 10px 10px 10px;
     cursor: pointer;
+    
+    /* color: white; */
+    margin: 5px 0px 2px 4px;
+    border-radius: 50px;
+}
+.backIcon:hover{
+  background: #c3c3c391;
 }
 .neweventform{
   overflow-y: scroll;
