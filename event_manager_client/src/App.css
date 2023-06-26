@@ -232,8 +232,17 @@ input[type="checkbox"]:checked+.slider:before {
   width: 366px;
   padding: 20px 30px 10px 30px;
   border: 0px transparent;
-  box-shadow: 1px 1px 10px 0px grey;
+  box-shadow: 0px 15px 15px #8c97a1;
   border-radius: 40px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+
+.card:hover {
+  /* Apply the scaling transformation on hover */
+  background-color: #e9e9e9ad;
+  transform: scale(1.05);
 }
 
 .eventTitle {
@@ -264,14 +273,17 @@ input[type="checkbox"]:checked+.slider:before {
   text-align: center;
 
 }
-
 .tagText {
   font-size: 12px;
   color: #ea2424;
-  /* margin-top: 0; */
   padding: 2px 4px 3px 3px;
   margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+
 
 .secondRow {
   padding-top: 14px;
@@ -320,10 +332,11 @@ input[type="checkbox"]:checked+.slider:before {
 }
 
 .thirdRow {
-  margin-top: 40px;
+  position: absolute;
+  margin-top: 130px;
   padding: 4px;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
 }
 
 .eventsContainer {
@@ -370,7 +383,7 @@ input[type="checkbox"]:checked+.slider:before {
   display: flex;
   justify-content: space-between;
   vertical-align: middle;
-  
+
 }
 
 .mailicon {
@@ -716,45 +729,53 @@ hr {
 
 /* Import Google Font - Poppins */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-*{
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
 }
 
-::selection{
+::selection {
   color: #fff;
   background: #5372F0;
 }
-.wrapper{
+
+.wrapper {
   width: 450px;
   background: #fff;
   margin-bottom: 14px;
   border-radius: 10px;
   padding: 18px 25px 20px;
-  box-shadow: 0 0 30px rgba(0,0,0,0.06);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.06);
 }
-.wrapper :where(.title, li, li i, .details){
+
+.wrapper :where(.title, li, li i, .details) {
   display: flex;
   align-items: center;
 }
-.title img{
+
+.title img {
   max-width: 21px;
 }
-.title h2{
+
+.title h2 {
   font-size: 21px;
   font-weight: 600;
   margin-left: 8px;
 }
-.wrapper .content{
+
+.wrapper .content {
   margin: 10px 0;
-  
+
 }
-.content p{
+
+.content p {
   font-size: 15px;
 }
-.content ul{
+
+.content ul {
   display: flex;
   flex-wrap: wrap;
   padding: 7px;
@@ -762,7 +783,8 @@ hr {
   border-radius: 5px;
   border: 1px solid #a6a6a6;
 }
-.content ul  li{
+
+.content ul li {
   color: #333;
   margin: 4px 3px;
   list-style: none;
@@ -771,7 +793,8 @@ hr {
   padding: 5px 8px 5px 10px;
   border: 1px solid #e3e1e1;
 }
-.content ul li i{
+
+.content ul li i {
   height: 20px;
   width: 20px;
   color: #808080;
@@ -782,17 +805,20 @@ hr {
   background: #dfdfdf;
   justify-content: center;
 }
-.content ul input{
+
+.content ul input {
   flex: 1;
   padding: 5px;
   border: none;
   outline: none;
   font-size: 16px;
 }
-.wrapper .details{
+
+.wrapper .details {
   justify-content: space-between;
 }
-.details button{
+
+.details button {
   border: none;
   outline: none;
   color: #fff;
@@ -803,42 +829,162 @@ hr {
   background: #5372F0;
   transition: background 0.3s ease;
 }
-.details button:hover{
+
+.details button:hover {
   background: #2c52ed;
 }
-.createEvent{
+
+.createEvent {
   padding: 10px 15px 5px 28px;
   height: 77vh;
-  
+
 }
-.backIcon{
+
+.backIcon {
   width: 43px;
-    padding: 10px 10px 10px 10px;
-    cursor: pointer;
-    
-    /* color: white; */
-    margin: 5px 0px 2px 4px;
-    border-radius: 50px;
+  padding: 10px 10px 10px 10px;
+  cursor: pointer;
+
+  /* color: white; */
+  margin: 5px 0px 2px 4px;
+  border-radius: 50px;
 }
-.backIcon:hover{
+
+.backIcon:hover {
   background: #c3c3c391;
 }
-.neweventform{
+
+.neweventform {
   overflow-y: scroll;
   height: 86vh;
 }
-.collabinput{
+
+.collabinput {
   /* border: 2px solid grey; */
   padding: 10px 10px 10px 10px;
   border-radius: 11px;
 }
-.collabinput input{
+
+.collabinput input {
   width: 100%;
   padding: 2px 5px 2px 10px;
 }
-.collabinput li{
+
+.collabinput li {
   background-color: rgba(192, 190, 190, 0.945);
 }
-.collabinput li:hover{
+
+.collabinput li:hover {
   background-color: #8a8c90b3;
+}
+
+.MyEventOpen {
+  padding: 5px 10px 10px 90px;
+  margin-top: 10px;
+
+}
+
+.Elabel {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 11px;
+}
+
+.EventOpenForm p {
+  padding-left: 10px;
+}
+
+.EventOpenForm {
+  padding: 0px 60px 0px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f0f0f0;
+}
+
+.EventOpenForm::-webkit-scrollbar {
+  width: 8px;
+}
+
+.EventOpenForm::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.EventOpenForm::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.EventOpenForm::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+.EventOpenForm::-webkit-scrollbar-corner {
+  background-color: #f0f0f0;
+}
+
+.dp_element:hover {
+  opacity: 0.8;
+}
+
+.myprofilepic:hover {
+  opacity: 0.8;
+}
+
+.backicon {
+  width: 49px;
+  padding: 10px 10px 10px 10px;
+  cursor: pointer;
+  /* color: white; */
+  margin: -5px 0px 2px -25px;
+  border-radius: 50px;
+}
+
+.backicon:hover {
+  background: #c3c3c391;
+}
+
+.collabrow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 5px 10px 12px;
+}
+
+.collabdp {
+  width: 56px;
+  border-radius: 50%;
+  box-shadow: -1px 3px 15px 1px #7f7f7fed;
+
+}
+
+.collabinfo {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+.collabrow:hover {
+  background-color: #e8e8e8;
+}
+
+.mb-6 {
+  margin-bottom: 15px;
+}
+
+.mb-6 .content {
+  width: 96vh;
+  padding: 0px 10px 0px 13px;
+}
+.taskrow{
+  display: flex;
+  flex-direction: row;
+  padding: 3px 5px 3px 17px;
+  align-items: center;
+}
+.taskrow:hover{
+  background-color: #e8e8e8;
 }

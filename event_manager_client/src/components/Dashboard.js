@@ -24,14 +24,19 @@ const Dashboard = () => {
   const [showdashboard, setShowdashboard] = useState(true);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const handleEventsClick = (event) => {
+    if (showdashboard === false) {
+      setShowdashboard(true);
+      setSelectedEvent(null);
+    } else {
       setShowdashboard(false);
       setSelectedEvent(event);
+    }
   };
   return (
     <>
       <div className="part1">
         <Navbar />
-        {showdashboard ? (
+        {showdashboard && (
           <div className="main_container">
             <h1 className="main_title">Event Dashboard</h1>
             <EventsNav />
@@ -52,14 +57,20 @@ const Dashboard = () => {
                     isActive={event.isActive}
                     collaborators={event.collaborators}
                     admin={event.admin}
-                    onclick={handleEventsClick(event)}
+                    event={event}
+                    handleEventsClick={handleEventsClick}
+                    
                   />
                 ))
               )}
             </div>
           </div>
-        ) : (
-          <EventOpen event={selectedEvent} />
+        )}
+        {!showdashboard && (
+          <EventOpen
+            event={selectedEvent}
+            handleEventsClick={handleEventsClick}
+          />
         )}
       </div>
     </>

@@ -24,7 +24,7 @@ const EventsCard = (props) => {
   // };
 
   return (
-    <div className="card">
+    <div className="card" onClick={() => props.handleEventsClick(props.event)}>
       <div className="firstRow">
         <p className="eventTitle" style={{ marginBottom: "0rem" }}>
           {props.title}
@@ -40,10 +40,17 @@ const EventsCard = (props) => {
         </p>
       </div>
       <div className="secondRow">
-        {props.tags.map((tag) => (
-          <Tags key={tag} title={tag} />
-        ))}
+        {props.tags.length <= 3 ? (
+          props.tags.map((tag) => <Tags key={tag} title={tag} />)
+        ) : (
+          <>
+            <Tags key={props.tags[0]} title={props.tags[0]} />
+            <Tags key={props.tags[1]} title={props.tags[1]} />
+            <Tags key={props.tags[2]} title={props.tags[2]} />
+          </>
+        )}
       </div>
+
       <div className="thirdRow">
         <div className="teamRow">
           {props.collaborators.length <= 2 ? (
@@ -85,7 +92,10 @@ const EventsCard = (props) => {
             </>
           )}
         </div>
-        <span className="edit_btn">
+        <span
+          className="edit_btn"
+          style={{ position: "absolute", left: "268px" }}
+        >
           <img src={edit} alt="edit" width="40px" />
         </span>
       </div>
