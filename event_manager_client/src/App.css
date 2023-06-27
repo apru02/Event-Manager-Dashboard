@@ -382,42 +382,42 @@ input[type="checkbox"]:checked+.slider:before {
   padding: 20px 10px 4px 26px;
   display: flex;
   justify-content: space-between;
-  vertical-align: middle;
+  align-items: center;
+}
 
+.leftIcons {
+  display: flex;
+  align-items: center;
 }
 
 .mailicon {
-  position: relative;
-  align-items: center;
-  display: flex;
-  left: 23px;
-
+  margin-right: 10px;
 }
 
 .bellicon {
-  position: relative;
-  align-items: center;
+  margin-right: 10px;
+}
+
+.rightContent {
   display: flex;
-  left: -23px;
+  align-items: center;
 }
 
 .userName {
-  position: relative;
-  display: flex;
-  text-align: center;
-  align-items: center;
   font-weight: bold;
   font-size: 22px;
-  right: -23px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
 }
 
 .userdp {
-
   position: relative;
   align-items: center;
   display: flex;
-  right: 25px;
 }
+
 
 hr {
   width: 65%;
@@ -887,7 +887,7 @@ hr {
 .Elabel {
   font-size: 30px;
   font-weight: 500;
-  margin-bottom: 11px;
+  margin-bottom: 0px;
 }
 
 .EventOpenForm p {
@@ -987,4 +987,115 @@ hr {
 }
 .taskrow:hover{
   background-color: #e8e8e8;
+}
+.definitionrow{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* padding-right: 512px; */
+  gap: 30px;
+  align-items: center;
+  align-content: center;
+  flex-wrap: nowrap;
+}
+
+.eventicons:hover{
+ 
+  cursor: pointer;
+}
+.chatcomponent h1{
+  margin-bottom: 0rem;
+  font-size: 34px;
+  font-weight: 450;
+  padding: 5px 15px 5px 15px;
+  background: #e2e2e282;
+}
+.chatcontent{
+  height: 73vh;
+  overflow-y: scroll;
+  padding: 10px 15px 5px 15px;
+  display: flex;
+  scrollbar-width: thin;
+  row-gap: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f0f0f0;
+  flex-direction: column;
+  flex-wrap: nowrap;
+}
+
+
+.chatcontent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatcontent::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.chatcontent::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.chatcontent::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+.chatcontent::-webkit-scrollbar-corner {
+  background-color: #f0f0f0;
+}
+
+
+.msg_row{
+  display: flex;
+}
+.msgbox{
+  background-color: #56c7ba59;
+  padding: 10px 10px 1px 10px;
+  border-radius: 10px;
+  max-width: 40vh;
+}
+.chatUserName{
+  font-size: 12px;
+  margin-bottom: 0rem;
+  text-align: left;
+  color: #35a700;
+  font-weight: 500;
+}
+.chatmsg{
+  font-size: 14px;
+  margin-bottom: 0rem;
+  text-align: left;
+}
+.chatTime{
+  font-size: 10px;
+  margin-bottom: 0rem;
+  text-align: right;
+  font-weight: 450;
+  color: #667781;
+}
+.inputmsgrow{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 5px -2px 11px grey;
+  background: #ffffff;
+  padding: 12px 18px 12px 15px;
+}
+.inputmsg{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: space-between;
+  align-items: center;
+  width: 57vh;
+  height: 40px;
+  border: 1px solid #00000047;
+  border-radius: 16px;
+  padding: 0px 18px 0px 15px;
+}
+.senticon:hover{
+  cursor: pointer;
 }

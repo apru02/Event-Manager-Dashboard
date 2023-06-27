@@ -11,7 +11,10 @@ router.get("/getchats/:event_id", fetchuser, async (req, res) => {
     try {
         const event_id = req.params.event_id;
         const chats = await Chat.findOne({ event_id });
-        res.status(200).json(chats);
+        if (!chats) {
+            return res.status(404).json({success:false, message: "No chats found" });
+        }
+        res.status(200).json({success:true,chats});
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });

@@ -24,7 +24,10 @@ const EventsCard = (props) => {
   // };
 
   return (
-    <div className="card" onClick={() => props.handleEventsClick(props.event)}>
+    <div className="card" onClick={() => {
+      props.handleEventsClick(props.event);
+      props.changeevent(props.event)
+      }}>
       <div className="firstRow">
         <p className="eventTitle" style={{ marginBottom: "0rem" }}>
           {props.title}

@@ -3,7 +3,7 @@ import message from "./logos/mail.png";
 import notifications from "./logos/bell.png";
 import dp from "./logos/user.png";
 import Userdetail from "./Userdetail";
-import "../App.css"
+import "../App.css";
 const UserNav = () => {
   const authtoken = localStorage.getItem("token");
   const [imagesrc, setImagesrc] = useState("");
@@ -54,24 +54,27 @@ const UserNav = () => {
 
   return (
     <nav className="navbar2">
-      <span className="mailicon">
-        <img src={message} alt="mail" width="36px" />
-      </span>
-      <span className="bellicon">
-        <img src={notifications} alt="notis" width="36px" />
-      </span>
-      <span className="userName">{user.name}</span>
-      <span className="userdp">
-        <img
-          src={imagesrc !== "" ? imagesrc : dp}
-          alt="dp"
-          className="dp_element"
-          style={{ width: "53px", borderRadius: "50%",cursor:"pointer" }}
-          onClick={showuserprofile}
-
-        />
-        {show && <Userdetail user={user} id="userdetail" />}
-      </span>
+      <div className="leftIcons">
+        <span className="mailicon">
+          <img src={message} alt="mail" width="36px" />
+        </span>
+        <span className="bellicon">
+          <img src={notifications} alt="notis" width="36px" />
+        </span>
+      </div>
+      <div className="rightContent">
+        <span className="userName">{user.name}</span>
+        <span className="userdp">
+          <img
+            src={imagesrc !== "" ? imagesrc : dp}
+            alt="dp"
+            className="dp_element"
+            style={{ width: "53px", borderRadius: "50%", cursor: "pointer" }}
+            onClick={showuserprofile}
+          />
+          {show && <Userdetail user={user} id="userdetail" />}
+        </span>
+      </div>
     </nav>
   );
 };

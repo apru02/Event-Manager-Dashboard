@@ -8,11 +8,13 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import EventOpen from "./EventOpen";
-const Dashboard = () => {
+const Dashboard = (props) => {
   const context = useContext(eventContext);
   const { events, getEvents } = context;
   const navigate = useNavigate();
+  
   useEffect(() => {
+   
     if (localStorage.getItem("token")) {
       getEvents();
     } else {
@@ -31,6 +33,9 @@ const Dashboard = () => {
       setShowdashboard(false);
       setSelectedEvent(event);
     }
+  };
+  const handleChatClick = () => {
+    props.handleChatClick();
   };
   return (
     <>
@@ -59,6 +64,7 @@ const Dashboard = () => {
                     admin={event.admin}
                     event={event}
                     handleEventsClick={handleEventsClick}
+                    changeevent={props.changeevent}
                     
                   />
                 ))
@@ -70,6 +76,8 @@ const Dashboard = () => {
           <EventOpen
             event={selectedEvent}
             handleEventsClick={handleEventsClick}
+            handleChatClick={handleChatClick}
+            handlebackfromevent={props.handlebackfromevent}
           />
         )}
       </div>

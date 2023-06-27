@@ -7,11 +7,33 @@ import SignupComponent from "./components/signup";
 import SigninComponent from "./components/Login";
 import EventState from "./Context/EventState";
 import UpdateAccount from "./components/UpdateAccount";
+import { useState } from "react";
 //import { useNavigate } from "react-router-dom";
 function App() {
   //const navigate = useNavigate();
   // const token = localStorage.getItem("token");
   
+const [showchat, setShowchat] = useState(false);
+const [currentEvent, setCurrentEvent] = useState([]);
+const changeevent = (event) => {
+  setCurrentEvent(event);
+  console.log(currentEvent);
+};
+ 
+  const handlebackfromevent =()=>{
+    if (showchat === true) {
+      setShowchat(false);
+    }
+
+  }
+  const handleChatClick = () => {
+    if (showchat === false) {
+      setShowchat(true);
+    } else {
+      setShowchat(false);
+    }
+    //console.log(showchat);
+  };
 
   return (
     <>
@@ -25,8 +47,8 @@ function App() {
             path="/"
             element={
               <div className="grid-container">
-                <Dashboard />
-                <Profile />
+                <Dashboard handleChatClick={handleChatClick} handlebackfromevent={handlebackfromevent} changeevent={changeevent}/>
+                <Profile showchat={showchat} currentEvent={currentEvent} handleChatClick={handleChatClick} />
               </div>
             }
           />

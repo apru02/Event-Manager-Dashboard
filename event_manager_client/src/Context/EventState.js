@@ -1,3 +1,4 @@
+//import { set } from "mongoose";
 import eventContext from "./EventContext";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -5,16 +6,30 @@ const EventState = (props) => {
   const host = "http://localhost:5000";
   const eventsInitial = [];
   const [events, setEvents] = useState(eventsInitial);
+  const [curruser, setcurruser] = useState({});// Get user details
   let authtoken = localStorage.getItem("token");
   // Get all Notes
   useEffect(() => {
     if (authtoken) {
       getEvents();
+      getUserDetails();
     } else {
       setEvents(eventsInitial); // Clear events data
+      setcurruser({});
     }
     // eslint-disable-next-line
   }, [authtoken]);
+  const getUserDetails = async () => {
+    // API Call
+    const response = await fetch(`${host}/api/auth/getuser`, {
+      method: "POST",
+      headers: {
+        "auth-token": authtoken,
+      },
+    });
+    const json = await response.json();
+    setcurruser(json);
+  };
   const getEvents = async () => {
     // API Call
     const response = await fetch(`${host}/api/event/events`, {
@@ -137,7 +152,7 @@ const EventState = (props) => {
 
   return (
     <eventContext.Provider
-      value={{ events, getEvents, addEvent, deleteEvent, editEvent }}
+      value={{ events, curruser,getUserDetails, getEvents, addEvent, deleteEvent, editEvent }}
     >
       {props.children}
     </eventContext.Provider>

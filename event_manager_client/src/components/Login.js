@@ -38,6 +38,7 @@ const SigninComponent = () => {
       // Save the auth token and redirect
       localStorage.setItem("token", json.authtoken);
       navigate("/");
+      window.location.reload();
     } else {
       alert("Invalid credentials");
     }
