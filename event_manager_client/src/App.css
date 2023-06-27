@@ -273,6 +273,7 @@ input[type="checkbox"]:checked+.slider:before {
   text-align: center;
 
 }
+
 .tagText {
   font-size: 12px;
   color: #ea2424;
@@ -879,7 +880,7 @@ hr {
 }
 
 .MyEventOpen {
-  padding: 5px 10px 10px 90px;
+  padding: 5px 10px 10px 70px;
   margin-top: 10px;
 
 }
@@ -979,16 +980,19 @@ hr {
   width: 96vh;
   padding: 0px 10px 0px 13px;
 }
-.taskrow{
+
+.taskrow {
   display: flex;
   flex-direction: row;
   padding: 3px 5px 3px 17px;
   align-items: center;
 }
-.taskrow:hover{
+
+.taskrow:hover {
   background-color: #e8e8e8;
 }
-.definitionrow{
+
+.definitionrow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -999,18 +1003,27 @@ hr {
   flex-wrap: nowrap;
 }
 
-.eventicons:hover{
- 
+.eventicons:hover {
+
   cursor: pointer;
 }
-.chatcomponent h1{
+
+.chatcomponent h1 {
   margin-bottom: 0rem;
-  font-size: 34px;
+  font-size: 30px;
+  width: 51vh;
   font-weight: 450;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.groupname {
   padding: 5px 15px 5px 15px;
   background: #e2e2e282;
 }
-.chatcontent{
+
+.chatcontent {
   height: 73vh;
   overflow-y: scroll;
   padding: 10px 15px 5px 15px;
@@ -1046,36 +1059,44 @@ hr {
 }
 
 
-.msg_row{
+.msg_row {
   display: flex;
 }
-.msgbox{
+
+.msgbox {
   background-color: #56c7ba59;
   padding: 10px 10px 1px 10px;
   border-radius: 10px;
   max-width: 40vh;
 }
-.chatUserName{
+
+.chatUserName {
   font-size: 12px;
   margin-bottom: 0rem;
   text-align: left;
   color: #35a700;
   font-weight: 500;
 }
-.chatmsg{
+
+.chatmsg {
   font-size: 14px;
   margin-bottom: 0rem;
   text-align: left;
 }
-.chatTime{
+
+.chatTime {
   font-size: 10px;
   margin-bottom: 0rem;
   text-align: right;
   font-weight: 450;
   color: #667781;
 }
-.inputmsgrow{
+
+.inputmsgrow {
   display: flex;
+  position: absolute;
+  bottom: 0px;
+  width: 70vh;
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
@@ -1084,7 +1105,8 @@ hr {
   background: #ffffff;
   padding: 12px 18px 12px 15px;
 }
-.inputmsg{
+
+.inputmsg {
   display: flex;
   flex-direction: row;
   align-content: center;
@@ -1096,6 +1118,8 @@ hr {
   border-radius: 16px;
   padding: 0px 18px 0px 15px;
 }
-.senticon:hover{
+
+.senticon:hover {
   cursor: pointer;
 }
+

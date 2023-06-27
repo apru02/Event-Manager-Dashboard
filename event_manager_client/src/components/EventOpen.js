@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import backicon from "./logos/back.png";
 import chaticon from "./logos/chat.png";
 import addcollabicon from "./logos/add-group.png";
@@ -7,7 +7,32 @@ import tagicon from "./logos/price-tag.png";
 import edit from "./logos/edit.png";
 import addtaskicon from "./logos/to-do-list.png";
 import "../App.css";
+
+
 const EventOpen = (props) => {
+  const [showtitle, setShowtitle] = useState(false);
+  const [showdesc, setShowdesc] = useState(false);
+  const [showtags, setShowtags] = useState(false);
+  const [showtasks, setShowtasks] = useState(false);
+  const [showcollabs, setShowcollabs] = useState(false);
+  const handleTitleClick = () => {
+    setShowtitle(!showtitle);
+  };
+  const handleDescClick = () => {
+    setShowdesc(!showdesc);
+  };
+  const handleTagsClick = () => {
+    setShowtags(!showtags);
+  };
+  const handleTasksClick = () => {
+    setShowtasks(!showtasks);
+  };
+  const handleCollabsClick = () => {
+    setShowcollabs(!showcollabs);
+  };
+
+
+
   return (
     <div className="MyEventOpen">
       <span
@@ -45,15 +70,26 @@ const EventOpen = (props) => {
           paddingRight: "28px",
         }}
       >
-        <h1 style={{ marginBottom: "0rem", width: "100vh" }}>
-          {props.event.title}{" "}
+        <h1
+          style={{
+            marginBottom: "0rem",
+            width: "100vh",
+            fontSize: `35px`,
+            whiteSpace: "nowrap",
+            
+          }}
+        >
+          {!showtitle && props.event.title}{" "}
+          {showtitle && <input type="text" value={props.event.title} />}
           <img
             src={edit}
             style={{ width: "22px", marginBottom: "31px" }}
             alt=""
             className="eventicons"
+            onClick={handleTitleClick}
           />
         </h1>
+
         <img
           src={chaticon}
           className="eventicons"
@@ -244,3 +280,5 @@ const EventOpen = (props) => {
 };
 
 export default EventOpen;
+
+

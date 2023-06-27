@@ -95,7 +95,9 @@ const Chat = (props) => {
 
   return (
     <div className="chatcomponent">
-      <h1>{event.title}</h1>
+      <div className="groupname">
+        <h1>{event.title}</h1>
+      </div>
       <div className="chatcontent" ref={chatContentRef} onScroll={handleScroll}>
         {mychats.length > 0 ? (
           mychats.map((chat) => <Message chat={chat} user={curruser} />)
@@ -103,28 +105,26 @@ const Chat = (props) => {
           <p>No chats to show</p>
         )}
       </div>
-      <div className="sendmessage">
-        <div className="inputmsgrow">
-          <input
-            type="text"
-            className="inputmsg"
-            value={message}
-            onChange={onchange}
-            placeholder="Type a message"
-            onKeyUp={(e) => {
-              if (e.key === "Enter") {
-                onsendmessage(e);
-              }
-            }}
-          />
-          <img
-            src={sendicon}
-            style={{ width: "30px" }}
-            className="senticon"
-            onClick={onsendmessage}
-            alt=""
-          />
-        </div>
+      <div className="inputmsgrow">
+        <input
+          type="text"
+          className="inputmsg"
+          value={message}
+          onChange={onchange}
+          placeholder="Type a message"
+          onKeyUp={(e) => {
+            if (e.key === "Enter") {
+              onsendmessage(e);
+            }
+          }}
+        />
+        <img
+          src={sendicon}
+          style={{ width: "30px" }}
+          className="senticon"
+          onClick={onsendmessage}
+          alt=""
+        />
       </div>
     </div>
   );
