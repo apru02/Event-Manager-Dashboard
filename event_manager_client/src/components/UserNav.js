@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import message from "./logos/mail.png";
+import message from "./logos/video.png";
 import notifications from "./logos/bell.png";
 import dp from "./logos/user.png";
 import Userdetail from "./Userdetail";
 import "../App.css";
-const UserNav = () => {
+const UserNav = (props) => {
   const authtoken = localStorage.getItem("token");
   const [imagesrc, setImagesrc] = useState("");
   const [user, setUser] = useState({
@@ -24,7 +24,7 @@ const UserNav = () => {
         },
       });
       const json = await response.json();
-      console.log(json);
+      //console.log(json);
       const user = {
         id: json._id,
         name: json.name,
@@ -34,7 +34,7 @@ const UserNav = () => {
       };
       setUser(user);
       const imageUrl = `http://localhost:5000/uploads/${json.photo}`;
-      console.log(imageUrl);
+      //console.log(imageUrl);
       setImagesrc(imageUrl);
     };
 
@@ -56,7 +56,12 @@ const UserNav = () => {
     <nav className="navbar2">
       <div className="leftIcons">
         <span className="mailicon">
-          <img src={message} alt="mail" width="36px" />
+          <img
+            src={message}
+            onClick={props.handlemeetclick}
+            alt="mail"
+            width="36px"
+          />
         </span>
         <span className="bellicon">
           <img src={notifications} alt="notis" width="36px" />

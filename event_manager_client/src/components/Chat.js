@@ -87,6 +87,30 @@ const Chat = (props) => {
     chatContentRef.current.scrollTop = chatContentRef.current.scrollHeight;
   };
 
+  const addDateDividers = () => {
+    const formattedChats = [];
+    let currentDate = null;
+
+    for (let i = 0; i < mychats.length; i++) {
+      const chat = mychats[i];
+      const chatDate = new Date(chat.date).toDateString();
+
+      if (currentDate !== chatDate) {
+        formattedChats.push({
+          ...chat,
+          isDateDivider: true,
+        });
+        currentDate = chatDate;
+      } else {
+        formattedChats.push(chat);
+      }
+    }
+
+    return formattedChats;
+  };
+
+  const formattedChats = addDateDividers();
+
   const handleScroll = () => {
     const { scrollTop, clientHeight, scrollHeight } = chatContentRef.current;
     const isScrolledToBottom = scrollTop + clientHeight >= scrollHeight - 10;
@@ -99,8 +123,14 @@ const Chat = (props) => {
         <h1>{event.title}</h1>
       </div>
       <div className="chatcontent" ref={chatContentRef} onScroll={handleScroll}>
-        {mychats.length > 0 ? (
-          mychats.map((chat) => <Message chat={chat} user={curruser} />)
+        {formattedChats.length > 0 ? (
+          formattedChats.map((chat, index) => (
+            <Message
+              chat={chat}
+              user={curruser}
+              key={`message-${index}`}
+            />
+          ))
         ) : (
           <p>No chats to show</p>
         )}

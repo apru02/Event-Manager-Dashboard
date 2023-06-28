@@ -21,7 +21,7 @@ const UpdateAccount = () => {
       },
     });
     const json = await response.json();
-    console.log(json);
+   // console.log(json);
     setName(json.name);
     setEmail(json.email);
     setUsername(json.username);
@@ -48,7 +48,7 @@ const UpdateAccount = () => {
     );
 
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
     if (json.success) {
       alert("Image Uploaded");
       const imageUrl = `http://localhost:5000/uploads/${json.user.photo}`; // Access the updated user object to get the photo property
@@ -74,7 +74,7 @@ const UpdateAccount = () => {
       }
     );
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
     if (json.success) {
       alert("Account Updated");
       navigate("/");

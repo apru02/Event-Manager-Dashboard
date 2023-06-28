@@ -50,6 +50,8 @@
 }
 
 .part2 {
+  display: flex;
+  flex-direction: column;
   width: 650px;
   height: 100vh;
   /* 100% of viewport height */
@@ -398,7 +400,9 @@ input[type="checkbox"]:checked+.slider:before {
 .bellicon {
   margin-right: 10px;
 }
-
+.mailicon:hover,.bellicon {
+  cursor: pointer;
+}
 .rightContent {
   display: flex;
   align-items: center;
@@ -428,7 +432,7 @@ hr {
 
 .calendar {
   font-family: Arial, sans-serif;
-  width: 427px;
+  width: 455px;
   background-color: #ffffff;
   border-radius: 5px;
   padding: 10px;
@@ -454,6 +458,7 @@ hr {
   border: none;
   cursor: pointer;
   font-size: 31px;
+  margin-bottom: 0rem;
   color: #999;
 }
 
@@ -517,7 +522,8 @@ hr {
   width: 72vh;
   position: absolute;
   margin: auto;
-  margin-top: 92px;
+  position: relative;
+  margin-bottom: 20px;
   padding: 12px;
 }
 
@@ -1021,6 +1027,12 @@ hr {
 .groupname {
   padding: 5px 15px 5px 15px;
   background: #e2e2e282;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .chatcontent {
@@ -1094,9 +1106,8 @@ hr {
 
 .inputmsgrow {
   display: flex;
-  position: absolute;
-  bottom: 0px;
-  width: 70vh;
+  position: relative;
+  bottom: -5px;
   flex-direction: row;
   align-content: center;
   justify-content: space-between;
@@ -1122,4 +1133,117 @@ hr {
 .senticon:hover {
   cursor: pointer;
 }
+.msginbox{
+  display: flex;
+  flex-direction: column;
+}
+.chatDate{
+  width: fit-content;
+  padding: 6px 9px 6px 9px;
+  margin-left: auto;
+  font-size: 14px;
+  color: #5d5d5dd1;
+  margin-right: auto;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  margin-top: 2px;
+  background: #e4e4e4;
+  text-align: center;
+}
+.meetings {
+  padding: 20px;
+  padding-bottom: 1px;
+}
 
+.meetings h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.meetingslist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+  height: 74vh;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f0f0f0;
+}
+
+.meetingslist::-webkit-scrollbar {
+  width: 8px;
+}
+
+.meetingslist::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.meetingslist::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.meetingslist::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+.meetingslist::-webkit-scrollbar-corner {
+  background-color: #f0f0f0;
+}
+
+
+.meeting {
+  background-color: #f2f2f2;
+  padding: 20px 30px 20px 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.meeting:hover {
+  background-color: #e0e0e0;
+  cursor: pointer;
+}
+
+.meeting h4 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.meeting p {
+  margin-bottom: 5px;
+}
+
+.meeting a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.dtrow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.joinersRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.dynamicIcons{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}

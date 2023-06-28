@@ -78,6 +78,7 @@ const Dashboard = (props) => {
             handleEventsClick={handleEventsClick}
             handleChatClick={handleChatClick}
             handlebackfromevent={props.handlebackfromevent}
+            handleEventmeetsClick ={props.handleEventmeetsClick}
           />
         )}
       </div>

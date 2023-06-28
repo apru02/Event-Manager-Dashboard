@@ -15,8 +15,12 @@ const meetingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "EventsModel",
     },
+    event_name: {
+        type: String,
+        required: true,
+    },
     participants: [userSchema],
-
+    creator: userSchema,
     title: {
         type: String,
         required: true,

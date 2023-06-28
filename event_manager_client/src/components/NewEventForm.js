@@ -113,7 +113,7 @@ const NewEventForm = (props) => {
   const handleFormSubmit = (e) => {
     // Perform any necessary form submission logic here
     e.preventDefault();
-    console.log(collaborators);
+    //console.log(collaborators);
     addEvent(
       eventDetails.title,
       eventDetails.description,

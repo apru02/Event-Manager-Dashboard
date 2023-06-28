@@ -6,8 +6,8 @@ import editicon from "./logos/editDesc.png";
 import tagicon from "./logos/price-tag.png";
 import edit from "./logos/edit.png";
 import addtaskicon from "./logos/to-do-list.png";
+import meeticon from "./logos/video-camera.png";
 import "../App.css";
-
 
 const EventOpen = (props) => {
   const [showtitle, setShowtitle] = useState(false);
@@ -30,8 +30,6 @@ const EventOpen = (props) => {
   const handleCollabsClick = () => {
     setShowcollabs(!showcollabs);
   };
-
-
 
   return (
     <div className="MyEventOpen">
@@ -76,7 +74,6 @@ const EventOpen = (props) => {
             width: "100vh",
             fontSize: `35px`,
             whiteSpace: "nowrap",
-            
           }}
         >
           {!showtitle && props.event.title}{" "}
@@ -89,7 +86,14 @@ const EventOpen = (props) => {
             onClick={handleTitleClick}
           />
         </h1>
-
+        <div className="dynamicIcons">
+          <img
+            src={meeticon}
+            className="eventicons"
+            alt=""
+            style={{ width: "35px" }}
+            onClick={props.handleEventmeetsClick}
+          />
         <img
           src={chaticon}
           className="eventicons"
@@ -97,6 +101,7 @@ const EventOpen = (props) => {
           style={{ width: "35px" }}
           onClick={props.handleChatClick}
         />
+        </div>
       </div>
       <hr
         style={{ width: "65%", margin: "0 0", border: "1px solid #3d3d3d8f" }}
@@ -280,5 +285,3 @@ const EventOpen = (props) => {
 };
 
 export default EventOpen;
-
-

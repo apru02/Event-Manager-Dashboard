@@ -6,23 +6,32 @@ import plus from "./logos/plus (1).png";
 import NewEventForm from "./NewEventForm";
 import { useState } from "react";
 import Chat from "./Chat";
+import Meetings from "./Meetings";
+import EventsMeet from "./EventsMeet";
 const Profile = (props) => {
   const [showForm, setShowForm] = useState(false);
+  
   const handlebtnclick = () => {
     setShowForm(!showForm);
   };
 
   return (
     <div className="part2">
-      <UserNav />
+      <UserNav handlemeetclick={props.handlemeetclick} />
       <hr />
-      {props.showchat ? (
+      {props.showMeets && (
+        <Meetings handlemeetclick={props.handlemeetclick}/>
+      )
+
+        }
+      {props.showEventMeet && (<EventsMeet event = {props.currentEvent}/>)}
+      {props.showchat  ? (
         <Chat event={props.currentEvent} />
       ) : (
         <>
-          {showForm && <NewEventForm handlebtnclick={handlebtnclick}  />}
-          {!showForm && <Calendar />}
-          {!showForm && (
+          {showForm && !props.showMeets && !props.showEventMeet && <NewEventForm handlebtnclick={handlebtnclick}  />}
+          {!showForm && !props.showMeets && !props.showEventMeet && <Calendar />}
+          {!showForm && !props.showMeets && !props.showEventMeet && (
             <div className="newEventBtn">
               <button className="newBtn" onClick={handlebtnclick}>
                 <span>
@@ -34,6 +43,7 @@ const Profile = (props) => {
           )}
         </>
       )}
+      
     </div>
   );
 };
