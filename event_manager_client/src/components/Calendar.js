@@ -1,10 +1,35 @@
 import React, { useState } from "react";
 import classNames from "classnames";
+import { useContext, useEffect } from "react";
+import eventContext from "../Context/EventContext";
 
 const Calendar = () => {
+  const context = useContext(eventContext);
+  const { meetings,fetchMeetings} = context;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
+  const [meetingdates, setMeetingdates] = useState([]);
+  useEffect(() => {
+    fetchMeetings();
+    //console.log(meetings);
+    setmeetingdates();
+    //console.log(meetingdates);
+    // eslint-disable-next-line
+  }, []);
+  const setmeetingdates = () => {
+    let meetdates=[];
+    meetings.map((meeting) => {
+      meetdates.push(convertDateFormat(meeting.meet_date));
+    });
+    setMeetingdates(meetdates);
+  };
+  const convertDateFormat = (dateString) => {
+    const [day, month, year] = dateString.split('/');
+    return `${month}/${day}/${year}`;
+  };
+  
 
+  
   const prevMonth = () => {
     setCurrentDate((prevDate) => {
       const prevMonthDate = new Date(prevDate.getFullYear(), prevDate.getMonth() - 1);
@@ -56,30 +81,42 @@ const Calendar = () => {
   const renderCalendarDays = () => {
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
-
+  
     const calendarDays = [];
-
+  
     for (let i = 0; i < firstDay; i++) {
       calendarDays.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
     }
-
-    for (let i = 1; i <= daysInMonth; i++) {
+  
+    for (let i = 1; i <= daysInMonth; ++i) {
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+      const dateString = date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' });
+      let isMeetingDate = false;
+      if (meetingdates.includes(dateString)) {
+        isMeetingDate = true;
+      }
+      console.log(dateString);
+      console.log(isMeetingDate);
+     
+      
       const dayClass = classNames("calendar-day", {
         "active": i === currentDate.getDate(),
         "selected": i === selectedDate,
         "current-date": i === new Date().getDate() && currentDate.getMonth() === new Date().getMonth(),
+        "meeting-date": isMeetingDate,
       });
-
+  
       calendarDays.push(
         <div key={i} className={dayClass} onClick={() => handleDayClick(i)}>
           {i}
         </div>
       );
     }
-
+  
     return calendarDays;
   };
-
+  
+  
   const renderDaysOfWeek = () => {
     const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 

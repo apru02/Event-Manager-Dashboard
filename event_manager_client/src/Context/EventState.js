@@ -7,12 +7,14 @@ const EventState = (props) => {
   const eventsInitial = [];
   const [events, setEvents] = useState(eventsInitial);
   const [curruser, setcurruser] = useState({});// Get user details
+  const [meetings, setMeetings] = useState([]);
   let authtoken = localStorage.getItem("token");
   // Get all Notes
   useEffect(() => {
     if (authtoken) {
       getEvents();
       getUserDetails();
+      fetchMeetings();
     } else {
       setEvents(eventsInitial); // Clear events data
       setcurruser({});
@@ -30,6 +32,17 @@ const EventState = (props) => {
     const json = await response.json();
     setcurruser(json);
   };
+  const fetchMeetings = async () => {
+    const response = await fetch(`${host}/api/meet/getallmeetings`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": authtoken,
+      },
+    });
+    const json = await response.json();
+    setMeetings(json);
+  };
   const getEvents = async () => {
     // API Call
     const response = await fetch(`${host}/api/event/events`, {
@@ -43,7 +56,7 @@ const EventState = (props) => {
     setEvents(json);
   };
 
-  // Add a Note
+  // Add a Event
   const addEvent = async (
     title,
     description,
@@ -152,7 +165,7 @@ const EventState = (props) => {
 
   return (
     <eventContext.Provider
-      value={{ events, curruser,getUserDetails, getEvents, addEvent, deleteEvent, editEvent }}
+      value={{ events, curruser,meetings,fetchMeetings, getUserDetails, getEvents, addEvent, deleteEvent, editEvent }}
     >
       {props.children}
     </eventContext.Provider>

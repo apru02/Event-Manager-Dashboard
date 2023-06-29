@@ -1161,15 +1161,23 @@ hr {
 }
 
 .meetingslist {
-  display: grid;
+  display: flex;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
-  height: 74vh;
+  height: 68vh;
   overflow-y: scroll;
   scrollbar-width: thin;
   scrollbar-color: #ccc #f0f0f0;
+  flex-direction: column;
 }
-
+.meetspan{
+  overflow: hidden;
+  display: inline-block;
+  width: 41vh;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
 .meetingslist::-webkit-scrollbar {
   width: 8px;
 }
@@ -1246,4 +1254,50 @@ button {
   display: flex;
   flex-direction: row;
   gap: 20px;
+}
+.meetbtn{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0rem;
+  gap: 6px;
+  padding: 3px 8px 3px 8px;
+  background-color: rgba(77, 193, 166, 0.801);
+}
+.meetbtn:hover{
+  background-color: rgba(77, 193, 166, 0.973);
+  cursor: pointer;
+}
+
+.popup {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  display: none;
+}
+
+
+.meetform{
+  display: flex;
+    flex-direction: column;
+    /* column-gap: 20px; */
+    row-gap: 17px;
+    align-content: center;
+    align-items: stretch;
+}
+.createmeet{
+  padding: 10px 15px 10px 15px;
+}
+.meeting-date{
+  background-color: #f3ee4fd9;
+    border-radius: 50%;
+    width: 46px;
+    margin-left: 8px;
+    padding: 0px;
 }

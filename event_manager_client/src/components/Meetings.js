@@ -22,7 +22,7 @@ const Meetings = (props) => {
     });
     const json = await response.json();
     setMeetings(json);
-    console.log(json);
+   // console.log(json);
   };
 
   return (
@@ -35,8 +35,8 @@ const Meetings = (props) => {
             <div className="meeting">
               <h4>{meeting.title}</h4>
               <p>Event : {meeting.event_name}</p>
-              <p>
-                <a href={meeting.meet_link}>Meet Link </a>: {meeting.meet_link}
+              <p >
+                <a href={meeting.meet_link}>Meet Link </a>: <span className="meetspan" >{meeting.meet_link}</span> 
               </p>
               <div className="dtrow">
                 <p>Date : {meeting.meet_date}</p>
