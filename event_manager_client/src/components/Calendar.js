@@ -18,9 +18,10 @@ const Calendar = () => {
   }, []);
   const setmeetingdates = () => {
     let meetdates=[];
-    meetings.map((meeting) => {
-      meetdates.push(convertDateFormat(meeting.meet_date));
-    });
+    for (let i = 0; i < meetings.length; i++) {
+      meetdates.push(convertDateFormat(meetings[i].meet_date));
+    }
+    
     setMeetingdates(meetdates);
   };
   const convertDateFormat = (dateString) => {

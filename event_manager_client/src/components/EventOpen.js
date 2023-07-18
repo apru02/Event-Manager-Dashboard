@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import backicon from "./logos/back.png";
 import chaticon from "./logos/chat.png";
 import addcollabicon from "./logos/add-group.png";
@@ -9,7 +9,36 @@ import addtaskicon from "./logos/to-do-list.png";
 import meeticon from "./logos/video-camera.png";
 import "../App.css";
 
+
 const EventOpen = (props) => {
+  const host = "http://localhost:5000";
+  const authtoken = localStorage.getItem("token");
+  const [user, setUser] = useState({});
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetch(`${host}/api/auth/getuser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authtoken,
+        },
+      });
+      const json = await response.json();
+      //console.log(json);
+      const user = {
+        id: json._id,
+        name: json.name,
+        username: json.username,
+        email: json.email,
+        photo: json.photo,
+      };
+      setUser(user);
+    };
+    if (authtoken) {
+      fetchUser();
+    }
+  }, [authtoken]);
+
   const [showtitle, setShowtitle] = useState(false);
   const [showdesc, setShowdesc] = useState(false);
   const [showtags, setShowtags] = useState(false);
@@ -17,7 +46,18 @@ const EventOpen = (props) => {
   const [showcollabs, setShowcollabs] = useState(false);
   const [showTaskrow, setShowTaskrow] = useState(true);
   const handleTitleClick = () => {
-    setShowtitle(!showtitle);
+    if (user.id === props.event.admin) {
+      setShowtitle(!showtitle);
+    }
+    else{
+      props.setMessage1("You are not the admin of this event");
+      props.setType1("danger");
+      props.setShowAlert1(true);
+      setTimeout(() => {
+        props.setShowAlert1(false);
+      }
+      , 3000);
+    }
   };
   const handleDescClick = () => {
     setShowdesc(!showdesc);
@@ -91,7 +131,6 @@ const EventOpen = (props) => {
     });
     setTasks(updatedTasks);
   };
-  const host = "http://localhost:5000";
   const handleAddtask = async (e) => {
     const taskDescription = e.target.value;
     if (taskDescription.length > 1) {
@@ -114,9 +153,53 @@ const EventOpen = (props) => {
     }
     e.target.value = "";
   };
+  const [currCollaborator, setCurrCollaborator] = useState("");
+  const [promptdisplay, setPromptDisplay] = useState("");
+  const [currValidCollaborator, setCurrValidCollaborator] = useState({});
+  const oncollabchange = (e) => {
+    setCurrCollaborator(e.target.value);
+    userSearchPrompt();
+  };
+  const userSearchPrompt = async () => {
+    const response = await fetch(
+      `${host}/api/auth/searchuser/${currCollaborator}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    const json = await response.json();
+    if (json.success) {
+      setPromptDisplay(json.users.name);
+      setCurrValidCollaborator(json.users);
+    } else {
+      setPromptDisplay("");
+    }
+  };
+  const handleAddCollab = async (e) => {
+    e.preventDefault();
+    for (let i = 0; i < collaborators.length; i++) {
+      if (collaborators[i]._id === currValidCollaborator._id) {
+        return;
+      }
+    }
+    const newCollaborator = {
+      _id: currValidCollaborator._id,
+      name: currValidCollaborator.name,
+      email: currValidCollaborator.email,
+      username: currValidCollaborator.username,
+      photo: currValidCollaborator.photo,
+    };
+    setCollaborators([...collaborators, newCollaborator]);
+  };
 
   return (
+
     <div className="MyEventOpen">
+      
       <span
         onClick={() => {
           props.handleEventsClick(props.event);
@@ -266,7 +349,7 @@ const EventOpen = (props) => {
                 <div className="collabrow">
                   <img
                     className="collabdp"
-                    src={`http://localhost:5000/uploads/${collaborator.photo}`}
+                    src={`${host}/uploads/${collaborator.photo}`}
                     alt=""
                   />
                   <div className="collabinfo">
@@ -275,6 +358,7 @@ const EventOpen = (props) => {
                       style={{ marginBottom: "0rem", fontSize: "18px" }}
                     >
                       {collaborator.name}
+                      {user.id === collaborator._id ? " (You)" : ""}
                     </p>
                     {collaborator._id === props.event.admin ? (
                       <p
@@ -286,21 +370,34 @@ const EventOpen = (props) => {
                       >
                         Admin
                       </p>
-                    ) : (
-                      " "
-                    )}
+                    ) : null}
                   </div>
                 </div>
               );
             })}
           </div>
           {showcollabs && (
-            <input
-              type="text"
-              className="form-control"
-              id="exampleInputPassword1"
-              style={{ display: "none" }}
-            />
+            <div className="collabinput">
+              <input
+                type="text"
+                className="eventEdit"
+                style={{ border: "2px solid grey", borderRadius: "3px" }}
+                spellCheck="false"
+                onChange={oncollabchange}
+                placeholder="Enter username of the collaborator to be added"
+              />
+
+              {promptdisplay !== "" ? (
+                <li
+                  style={{ padding: "3px 5px 3px 10px", cursor: "pointer" }}
+                  onClick={handleAddCollab}
+                >
+                  {promptdisplay}
+                </li>
+              ) : (
+                " "
+              )}
+            </div>
           )}
         </div>
         <div className="mb-6">

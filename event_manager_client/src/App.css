@@ -1309,6 +1309,9 @@ button {
 .eventEdit:focus{
   outline: none;
 }
+.eventEdit ::placeholder{
+  font-style: italic;
+}
 .cross{
   display: inline-block;
   width: 20px;
@@ -1318,4 +1321,12 @@ button {
   background-size: contain;
   cursor: pointer;
 
+}
+.alert{
+  position: absolute;
+  width: 100%;
+  height: 5vh;
+  border-radius: 0px;
+  padding: 5px;
+  z-index: 100;
 }

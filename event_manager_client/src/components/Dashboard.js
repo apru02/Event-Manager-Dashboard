@@ -12,9 +12,8 @@ const Dashboard = (props) => {
   const context = useContext(eventContext);
   const { events, getEvents } = context;
   const navigate = useNavigate();
-  
+
   useEffect(() => {
-   
     if (localStorage.getItem("token")) {
       getEvents();
     } else {
@@ -65,7 +64,6 @@ const Dashboard = (props) => {
                     event={event}
                     handleEventsClick={handleEventsClick}
                     changeevent={props.changeevent}
-                    
                   />
                 ))
               )}
@@ -78,7 +76,10 @@ const Dashboard = (props) => {
             handleEventsClick={handleEventsClick}
             handleChatClick={handleChatClick}
             handlebackfromevent={props.handlebackfromevent}
-            handleEventmeetsClick ={props.handleEventmeetsClick}
+            handleEventmeetsClick={props.handleEventmeetsClick}
+            setShowAlert1={props.setShowAlert1}
+            setMessage1={props.setMessage1}
+            setType1={props.setType1}
           />
         )}
       </div>

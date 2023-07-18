@@ -7,8 +7,8 @@ import SignupComponent from "./components/signup";
 import SigninComponent from "./components/Login";
 import EventState from "./Context/EventState";
 import UpdateAccount from "./components/UpdateAccount";
+import Alert from "./components/Alert";
 import { useState } from "react";
-
 
 //import { useNavigate } from "react-router-dom";
 function App() {
@@ -37,12 +37,10 @@ function App() {
   const handlebackfromevent = () => {
     if (showchat === true) {
       setShowchat(false);
-      
     }
     if (showEventMeet === true) {
       setShowEventMeet(false);
     }
-    
   };
   const handlebackfromMeet = () => {
     if (showMeets === true) {
@@ -68,10 +66,23 @@ function App() {
     }
     //console.log(showchat);
   };
+  const [showAlert, setShowAlert] = useState(false);
+  const [message, setMessage] = useState("");
+  const [type, setType] = useState("");
+  const setShowAlert1 = (value) => {
+    setShowAlert(value);
+  };
+  const setMessage1 = (value) => {
+    setMessage(value);
+  };
+  const setType1 = (value) => {
+    setType(value);
+  };
 
   return (
     <>
       <EventState>
+        {showAlert && <Alert message={message} type={type} />}
         <Router>
           <Routes>
             <Route
@@ -84,6 +95,9 @@ function App() {
                     handlebackfromevent={handlebackfromevent}
                     changeevent={changeevent}
                     handleEventmeetsClick={handleEventmeetsClick}
+                    setShowAlert1={setShowAlert1}
+                    setMessage1={setMessage1}
+                    setType1={setType1}
                   />
                   <Profile
                     showchat={showchat}
@@ -92,13 +106,46 @@ function App() {
                     handleChatClick={handleChatClick}
                     handlemeetclick={handlemeetclick}
                     showEventMeet={showEventMeet}
+                    setShowAlert1={setShowAlert1}
+                    setMessage1={setMessage1}
+                    setType1={setType1}
                   />
                 </div>
               }
             />
-            <Route exact path="/signup" element={<SignupComponent />} />
-            <Route exact path="/signin" element={<SigninComponent />} />
-            <Route exact path="/editaccount" element={<UpdateAccount />} />
+            <Route
+              exact
+              path="/signup"
+              element={
+                <SignupComponent
+                  setShowAlert1={setShowAlert1}
+                  setMessage1={setMessage1}
+                  setType1={setType1}
+                />
+              }
+            />
+            <Route
+              exact
+              path="/signin"
+              element={
+                <SigninComponent
+                  setShowAlert1={setShowAlert1}
+                  setMessage1={setMessage1}
+                  setType1={setType1}
+                />
+              }
+            />
+            <Route
+              exact
+              path="/editaccount"
+              element={
+                <UpdateAccount
+                  setShowAlert1={setShowAlert1}
+                  setMessage1={setMessage1}
+                  setType1={setType1}
+                />
+              }
+            />
           </Routes>
         </Router>
       </EventState>
