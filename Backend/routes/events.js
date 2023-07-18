@@ -106,48 +106,7 @@ router.put("/updateevent/:id", fetchuser, async (req, res) => {
   }
 });
 
-//add task and edit task
-router.put("/updateevent/:id", fetchuser, async (req, res) => {
-  const { title, description, tags, eventStartDate, eventEndDate } = req.body;
-  try {
-    // Create a newEvent object
-    const newEvent = {};
-    if (title) {
-      newEvent.title = title;
-    }
-    if (description) {
-      newEvent.description = description;
-    }
-    if (tags) {
-      newEvent.tags = tags;
-    }
-    if (eventStartDate) {
-      newEvent.eventStartDate = eventStartDate;
-    }
-    if (eventEndDate) {
-      newEvent.eventEndDate = eventEndDate;
-    }
 
-    // Find the note to be updated and update it
-    let event = await Event.findById(req.params.id);
-    if (!event) {
-      return res.status(404).send("Not Found");
-    }
-
-    if (event.admin.toString() !== req.user.id) {
-      return res.status(401).send("Not Allowed");
-    }
-    event = await Event.findByIdAndUpdate(
-      req.params.id,
-      { $set: newEvent },
-      { new: true }
-    );
-    res.json({ event });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
 
 // Route: POST /api/createtask/:id
 // Description: Create a new task for an event
@@ -168,8 +127,8 @@ router.post("/createtask/:id", async (req, res) => {
 
     // Save the updated event
     await event.save();
-
-    res.json({ message: "Task created successfully", event });
+    res_task = event.tasks[event.tasks.length - 1];
+    res.json({ message: "Task created successfully",res_task });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Internal Server Error" });

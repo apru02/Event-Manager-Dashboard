@@ -88,15 +88,15 @@ const Calendar = () => {
       calendarDays.push(<div key={`empty-${i}`} className="calendar-day empty"></div>);
     }
   
-    for (let i = 1; i <= daysInMonth; ++i) {
+    for (let i = 1; i <= daysInMonth; i++) {
       const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
       const dateString = date.toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' });
       let isMeetingDate = false;
       if (meetingdates.includes(dateString)) {
         isMeetingDate = true;
       }
-      console.log(dateString);
-      console.log(isMeetingDate);
+     // console.log(dateString);
+     // console.log(isMeetingDate);
      
       
       const dayClass = classNames("calendar-day", {

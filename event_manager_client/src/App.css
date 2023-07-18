@@ -992,6 +992,7 @@ hr {
   flex-direction: row;
   padding: 3px 5px 3px 17px;
   align-items: center;
+  gap: 20px;
 }
 
 .taskrow:hover {
@@ -1300,4 +1301,21 @@ button {
     width: 46px;
     margin-left: 8px;
     padding: 0px;
+}
+.eventEdit{
+  background: transparent;
+  border: transparent;
+}
+.eventEdit:focus{
+  outline: none;
+}
+.cross{
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: url(./components/logos/remove-button-svgrepo-com.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
 }
