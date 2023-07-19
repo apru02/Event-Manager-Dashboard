@@ -62,10 +62,30 @@ router.get("/events", fetchuser, async (req, res) => {
   }
 });
 
+//Update event Status
+router.put("/updateeventstatus/:id", fetchuser, async (req, res) => {
+  const { isActive } = req.body;
+  let success = false;
+  try {
+    let event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).send({success,message:"Not Found"});
+    }
+    success = true;
+    event.isActive = isActive;
+    await event.save();
+
+    res.json({success, event });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send({success,message:"Internal Server Error"});
+  }
+});
+
 
 //Update events
 router.put("/updateevent/:id", fetchuser, async (req, res) => {
-  const { title, description, tags, eventStartDate, eventEndDate } = req.body;
+  const { title, description, tags, collaborators,eventStartDate, eventEndDate,tasks } = req.body;
   try {
     // Create a newEvent object
     const newEvent = {};
@@ -84,25 +104,30 @@ router.put("/updateevent/:id", fetchuser, async (req, res) => {
     if (eventEndDate) {
       newEvent.eventEndDate = eventEndDate;
     }
+    if (collaborators) {
+      newEvent.collaborators = collaborators;
+    }
+    if (tasks) {
+      newEvent.tasks = tasks;
+    }
+    let success = false;
 
     // Find the note to be updated and update it
     let event = await Event.findById(req.params.id);
     if (!event) {
-      return res.status(404).send("Not Found");
-    }
 
-    if (event.admin.toString() !== req.user.id) {
-      return res.status(401).send("Not Allowed");
+      return res.status(404).send({success,message:"Not Found"});
     }
+    success = true;
     event = await Event.findByIdAndUpdate(
       req.params.id,
       { $set: newEvent },
       { new: true }
     );
-    res.json({ event });
+    res.json({success, event });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({success,message:"Internal Server Error"});
   }
 });
 

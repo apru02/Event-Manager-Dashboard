@@ -7,13 +7,16 @@ import tagicon from "./logos/price-tag.png";
 import edit from "./logos/edit.png";
 import addtaskicon from "./logos/to-do-list.png";
 import meeticon from "./logos/video-camera.png";
+import calendarIcon from "./logos/calendar.png";
 import "../App.css";
-
 
 const EventOpen = (props) => {
   const host = "http://localhost:5000";
   const authtoken = localStorage.getItem("token");
   const [user, setUser] = useState({});
+  const [tasks, setTasks] = useState(props.event.tasks);
+  const [task_completed, setTask_completed] = useState(0);
+  const [enableSave, setEnableSave] = useState(false);
   useEffect(() => {
     const fetchUser = async () => {
       const response = await fetch(`${host}/api/auth/getuser`, {
@@ -34,10 +37,21 @@ const EventOpen = (props) => {
       };
       setUser(user);
     };
+    const completedtasks = () => {
+      let count = 0;
+      for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].completed === true) {
+          count++;
+        }
+      }
+      setTask_completed(count);
+    };
     if (authtoken) {
       fetchUser();
+      completedtasks();
     }
-  }, [authtoken]);
+    // eslint-disable-next-line
+  }, [authtoken, tasks]);
 
   const [showtitle, setShowtitle] = useState(false);
   const [showdesc, setShowdesc] = useState(false);
@@ -48,15 +62,13 @@ const EventOpen = (props) => {
   const handleTitleClick = () => {
     if (user.id === props.event.admin) {
       setShowtitle(!showtitle);
-    }
-    else{
-      props.setMessage1("You are not the admin of this event");
+    } else {
+      props.setMessage1("Only Admin of the event can change the Title");
       props.setType1("danger");
       props.setShowAlert1(true);
       setTimeout(() => {
         props.setShowAlert1(false);
-      }
-      , 3000);
+      }, 2000);
     }
   };
   const handleDescClick = () => {
@@ -74,17 +86,25 @@ const EventOpen = (props) => {
   const [title, setTitle] = useState(props.event.title);
   const [description, setDescription] = useState(props.event.description);
   const [tags, setTags] = useState(props.event.tags);
-  const [tasks, setTasks] = useState(props.event.tasks);
+
   const [collaborators, setCollaborators] = useState(props.event.collaborators);
+  const [eventStartDate, setEventStartDate] = useState(
+    props.event.eventStartDate
+  );
+  const [eventEndDate, setEventEndDate] = useState(props.event.eventEndDate);
+
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
+    setEnableSave(true);
   };
   const handleDescChange = (e) => {
     setDescription(e.target.value);
+    setEnableSave(true);
   };
   const removeTag = (tag) => {
     const updatedTags = tags.filter((t) => t !== tag);
     setTags(updatedTags);
+    setEnableSave(true);
   };
   const maxTags = 10;
   const createTag = () => {
@@ -111,16 +131,23 @@ const EventOpen = (props) => {
         }
       }
       e.target.value = "";
+      setEnableSave(true);
     }
   };
   const handletaskCheck = (task) => {
     const updatedTasks = tasks.map((t) => {
       if (t === task) {
         t.completed = !t.completed;
+        if (t.completed === true) {
+          setTask_completed(task_completed + 1);
+        } else {
+          setTask_completed(task_completed - 1);
+        }
       }
       return t;
     });
     setTasks(updatedTasks);
+    setEnableSave(true);
   };
   const handleTaskChange = (e, task) => {
     const updatedTasks = tasks.map((t) => {
@@ -130,6 +157,7 @@ const EventOpen = (props) => {
       return t;
     });
     setTasks(updatedTasks);
+    setEnableSave(true);
   };
   const handleAddtask = async (e) => {
     const taskDescription = e.target.value;
@@ -149,7 +177,7 @@ const EventOpen = (props) => {
       const { res_task } = await response.json();
       const updatedTasks = [...tasks, res_task];
       setTasks(updatedTasks);
-      console.log(tasks);
+      setEnableSave(true);
     }
     e.target.value = "";
   };
@@ -194,12 +222,43 @@ const EventOpen = (props) => {
       photo: currValidCollaborator.photo,
     };
     setCollaborators([...collaborators, newCollaborator]);
+    setEnableSave(true);
   };
-
+  const handleSaveChanges = async () => {
+    if (enableSave === true) {
+      const response = await fetch(
+        `${host}/api/event/updateevent/${props.event._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+          body: JSON.stringify({
+            title: title,
+            description: description,
+            tags: tags,
+            collaborators: collaborators,
+            eventStartDate: eventStartDate,
+            eventEndDate: eventEndDate,
+            tasks: tasks,
+          }),
+        }
+      );
+      const json = await response.json();
+      if (json.success) {
+        props.setShowAlert1(true);
+        props.setMessage1("Event Updated Successfully");
+        props.setType1("success");
+        setTimeout(() => {
+          props.setShowAlert1(false);
+        }, 2500);
+        setEnableSave(false);
+      }
+    }
+  };
   return (
-
     <div className="MyEventOpen">
-      
       <span
         onClick={() => {
           props.handleEventsClick(props.event);
@@ -422,7 +481,12 @@ const EventOpen = (props) => {
                 class="eventEdit"
                 style={{ border: "1px solid grey", borderRadius: "3px" }}
                 spellCheck="false"
-                onKeyUp={addTag}
+                onKeyUp={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addTag(e);
+                  }
+                }}
               />
             )}
           </div>
@@ -432,6 +496,9 @@ const EventOpen = (props) => {
             <label htmlFor="exampleInputEmail1" className="form-label Elabel">
               Tasks
             </label>
+            <p style={{ marginBottom: "0rem", fontSize: "18px" }}>
+              {task_completed}/{tasks.length} tasks completed
+            </p>
             <img
               src={addtaskicon}
               className="eventicons"
@@ -515,7 +582,93 @@ const EventOpen = (props) => {
             />
           )}
         </div>
-        <button className="btn btn-primary">Submit</button>
+        <div className="mb-6">
+          <div className="definitionrow">
+            <label htmlFor="exampleInputEmail1" className="form-label Elabel">
+              Event Start Date
+            </label>
+            <img
+              src={calendarIcon}
+              className="eventicons"
+              style={{ width: "25px" }}
+              alt=""
+            />
+          </div>
+          <input
+            type="date"
+            className="calendarInput eventEdit"
+            style={{ border: "1px solid grey", borderRadius: "3px" }}
+            spellCheck="false"
+            value={eventStartDate}
+            onChange={(e) => {
+              if (e.target.value <= eventEndDate) {
+                setEventStartDate(e.target.value);
+              } else {
+                props.setMessage1("Start date cannot be greater than end date");
+                props.setType1("warning");
+                props.setShowAlert1(true);
+                setTimeout(() => {
+                  props.setShowAlert1(false);
+                }, 2000);
+              }
+            }}
+          />
+        </div>
+        <div className="mb-6">
+          <div className="definitionrow">
+            <label htmlFor="exampleInputEmail1" className="form-label Elabel">
+              Event End Date
+            </label>
+            <img
+              src={calendarIcon}
+              className="eventicons"
+              style={{ width: "25px" }}
+              alt=""
+            />
+          </div>
+          <input
+            type="date"
+            className="calendarInput eventEdit"
+            style={{ border: "1px solid grey", borderRadius: "3px" }}
+            spellCheck="false"
+            value={eventEndDate}
+            onChange={(e) => {
+              if (e.target.value >= eventStartDate) {
+                setEventEndDate(e.target.value);
+              } else {
+                props.setMessage1("End date cannot be less than start date");
+                props.setType1("warning");
+                props.setShowAlert1(true);
+                setTimeout(() => {
+                  props.setShowAlert1(false);
+                }, 2000);
+              }
+            }}
+          />
+        </div>
+        <div className="actionRow">
+          <button
+            className="btn btn-primary"
+            disabled={!enableSave}
+            onClick={handleSaveChanges}
+          >
+            Save Changes
+          </button>
+          <button
+            className="btn btn-primary"
+            style={{ backgroundColor: "red", color: "white" }}
+          >
+            {" "}
+            Exit From this Event
+          </button>
+          <button
+            className="btn btn-primary"
+            style={{ backgroundColor: "red", color: "white" }}
+          >
+            {" "}
+            Delete Event
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -1,39 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../App.css";
 import Tags from "./Tags";
-//import dp1 from "./logos/30.png";
 import edit from "./logos/pencil-2.png";
-const EventsCard = (props) => {
-  // const fetchUserImage = async (user) => {
-  //   const userid = user.toString();
-  //   const response = await fetch(
-  //     `http://localhost:5000/api/auth/getuserdp/${userid}`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     }
-  //   );
-  //   const json = await response.json();
 
-  //   const filename = json.filename;
-  //   console.log(filename.type);
-  //   const url = `http://localhost:5000/uploads/${filename}`;
-  //   return url;
-  // };
+const EventsCard = (props) => {
+  const host = "http://localhost:5000";
+  const [user, setUser] = useState({});
+  const [isCheck, setIsCheck] = useState(props.isActive);
+  const authtoken = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const response = await fetch(`${host}/api/auth/getuser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": authtoken,
+        },
+      });
+      const json = await response.json();
+      const user = {
+        id: json._id,
+        name: json.name,
+        username: json.username,
+        email: json.email,
+        photo: json.photo,
+      };
+      setUser(user);
+    };
+    fetchUser();
+  }, [authtoken]);
+
+  const handleStatusChange = async (e) => {
+    if (user.id !== props.admin) {
+      props.setShowAlert1(true);
+      props.setMessage1("You are not authorized to change the status");
+      props.setType1("danger");
+      setTimeout(() => {
+        props.setShowAlert1(false);
+      }, 2000);
+    } else {
+      setIsCheck(e.target.checked);
+      const response = await fetch(
+        `${host}/api/event/updateeventstatus/${props.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": authtoken,
+          },
+          body: JSON.stringify({
+            isActive: Boolean(e.target.checked),
+          }),
+        }
+      );
+      const json = await response.json();
+      console.log(json);
+      if (json.success) {
+        props.setShowAlert1(true);
+        props.setMessage1("Event status updated successfully");
+        props.setType1("success");
+
+        setTimeout(() => {
+          
+          props.setShowAlert1(false);
+        }, 1000);
+      }
+    }
+  };
 
   return (
-    <div className="card" onClick={() => {
-      props.handleEventsClick(props.event);
-      props.changeevent(props.event)
-      }}>
+    <div className="card">
       <div className="firstRow">
         <p className="eventTitle" style={{ marginBottom: "0rem" }}>
           {props.title}
         </p>
         <label className="switch">
-          <input type="checkbox" id="toggleSwitch" checked={props.isActive} />
+          <input
+            type="checkbox"
+            id="toggleSwitch"
+            checked={isCheck}
+            onChange={handleStatusChange}
+          />
           <span className="slider"></span>
         </label>
       </div>
@@ -53,7 +101,6 @@ const EventsCard = (props) => {
           </>
         )}
       </div>
-
       <div className="thirdRow">
         <div className="teamRow">
           {props.collaborators.length <= 2 ? (
@@ -99,7 +146,16 @@ const EventsCard = (props) => {
           className="edit_btn"
           style={{ position: "absolute", left: "268px" }}
         >
-          <img src={edit} alt="edit" width="40px" />
+          <img
+            src={edit}
+            alt="edit"
+            className="editIcon"
+            width="40px"
+            onClick={() => {
+              props.handleEventsClick(props.event);
+              props.changeevent(props.event);
+            }}
+          />
         </span>
       </div>
     </div>

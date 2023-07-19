@@ -19,7 +19,11 @@ const Dashboard = (props) => {
     } else {
       navigate("/signin");
     }
+    const interval = setInterval(() => {
+      getEvents();
+    }, 1000);
 
+    return () => clearInterval(interval);
     // eslint-disable-next-line
   }, []);
   const [showdashboard, setShowdashboard] = useState(true);
@@ -36,6 +40,10 @@ const Dashboard = (props) => {
   const handleChatClick = () => {
     props.handleChatClick();
   };
+  const [Active,setActive]=useState("true");
+  const SetEventStatus = (value) => {  
+    setActive(value);
+  };
   return (
     <>
       <div className="part1">
@@ -43,7 +51,7 @@ const Dashboard = (props) => {
         {showdashboard && (
           <div className="main_container">
             <h1 className="main_title">Event Dashboard</h1>
-            <EventsNav />
+            <EventsNav SetEventStatus = {SetEventStatus}/>
             <div className="eventsContainer">
               {!events ? (
                 <div className="noEvents">
@@ -51,21 +59,27 @@ const Dashboard = (props) => {
                 </div>
               ) : (
                 events.map((event) => (
-                  <EventsCard
-                    key={event._id}
-                    title={event.title}
-                    startDate={event.eventStartDate}
-                    endDate={event.eventEndDate}
-                    tags={event.tags}
-                    description={event.description}
-                    isActive={event.isActive}
-                    collaborators={event.collaborators}
-                    admin={event.admin}
-                    event={event}
-                    handleEventsClick={handleEventsClick}
-                    changeevent={props.changeevent}
-                  />
-                ))
+                  (Active ==="true" ? event.isActive : (Active === "false" ? !event.isActive : true)) && (
+                    <EventsCard
+                      key={event._id}
+                      id={event._id}
+                      title={event.title}
+                      startDate={event.eventStartDate}
+                      endDate={event.eventEndDate}
+                      tags={event.tags}
+                      description={event.description}
+                      isActive={event.isActive}
+                      collaborators={event.collaborators}
+                      admin={event.admin}
+                      event={event}
+                      handleEventsClick={handleEventsClick}
+                      changeevent={props.changeevent}
+                      setShowAlert1={props.setShowAlert1}
+                      setMessage1={props.setMessage1}
+                      setType1={props.setType1}
+                    />
+                  )
+                ))                
               )}
             </div>
           </div>

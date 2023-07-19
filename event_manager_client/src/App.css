@@ -1329,4 +1329,22 @@ button {
   border-radius: 0px;
   padding: 5px;
   z-index: 100;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+.calendarInput{
+  margin-left: 20px;
+}
+.actionRow{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin-top: 28px;
+  align-content: center;
+  justify-content: space-between;
+}
+.editIcon:hover{
+  cursor: pointer;
+  opacity: 0.6;
 }
