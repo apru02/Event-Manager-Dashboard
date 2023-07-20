@@ -85,7 +85,7 @@ router.put("/updateeventstatus/:id", fetchuser, async (req, res) => {
 
 //Update events
 router.put("/updateevent/:id", fetchuser, async (req, res) => {
-  const { title, description, tags, collaborators,eventStartDate, eventEndDate,tasks } = req.body;
+  const { title, description, tags, collaborators,eventStartDate, eventEndDate,tasks,admin } = req.body;
   try {
     // Create a newEvent object
     const newEvent = {};
@@ -110,6 +110,10 @@ router.put("/updateevent/:id", fetchuser, async (req, res) => {
     if (tasks) {
       newEvent.tasks = tasks;
     }
+    if (admin) {
+      newEvent.admin = admin;
+    }
+
     let success = false;
 
     // Find the note to be updated and update it
@@ -199,11 +203,12 @@ router.put("/edittask/:eventId/:taskId", async (req, res) => {
 
 //delete an event
 router.delete("/deletevent/:id", fetchuser, async (req, res) => {
+  let success = false;
   try {
     // Find the note to be delete and delete it
     let event = await Event.findById(req.params.id);
     if (!event) {
-      return res.status(404).send("Not Found");
+      return res.status(404).send({success,"message":"No event found"});
     }
 
     // Allow deletion only if user owns this Note
@@ -211,11 +216,30 @@ router.delete("/deletevent/:id", fetchuser, async (req, res) => {
       return res.status(401).send("Not Allowed");
     }
 
-    note = await Event.findByIdAndDelete(req.params.id);
-    res.json({ Success: "Event has been deleted", event: event });
+    event = await Event.findByIdAndDelete(req.params.id);
+    success = true;
+    res.json({ success, event: event });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({success,"message":"Internal Server Error"});
+  }
+});
+
+//event search promt
+router.get("/searchevent/:search", fetchuser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const search = req.params.search;
+    // Fetch all events and filter by the user's ID in the collaborators list
+    const events = await Event.find({ "collaborators._id": userId });
+    const filteredEvents = events.filter((event) => {
+      return event.title.toLowerCase().includes(search.toLowerCase());
+    });
+
+    res.status(200).json(filteredEvents);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 

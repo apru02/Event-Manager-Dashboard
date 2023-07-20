@@ -16,21 +16,21 @@ const Profile = (props) => {
   };
 
   return (
-    <div className="part2">
-      <UserNav handlemeetclick={props.handlemeetclick} />
+    <div className={`part2 ${props.darkTheme === "DarkTheme"? "dark_part2":""}`}>
+      <UserNav handlemeetclick={props.handlemeetclick} darkTheme={props.darkTheme} />
       <hr />
       {props.showMeets && (
-        <Meetings handlemeetclick={props.handlemeetclick}/>
+        <Meetings handlemeetclick={props.handlemeetclick} darkTheme={props.darkTheme}/>
       )
 
         }
-      {props.showEventMeet && (<EventsMeet event = {props.currentEvent}/>)}
+      {props.showEventMeet && (<EventsMeet event = {props.currentEvent} darkTheme={props.darkTheme}/>)}
       {props.showchat  ? (
-        <Chat event={props.currentEvent} />
+        <Chat event={props.currentEvent} darkTheme={props.darkTheme} />
       ) : (
         <>
-          {showForm && !props.showMeets && !props.showEventMeet && <NewEventForm handlebtnclick={handlebtnclick}  />}
-          {!showForm && !props.showMeets && !props.showEventMeet && <Calendar />}
+          {showForm && !props.showMeets && !props.showEventMeet && <NewEventForm handlebtnclick={handlebtnclick} darkTheme={props.darkTheme} />}
+          {!showForm && !props.showMeets && !props.showEventMeet && <Calendar darkTheme={props.darkTheme}/>}
           {!showForm && !props.showMeets && !props.showEventMeet && (
             <div className="newEventBtn">
               <button className="newBtn" onClick={handlebtnclick}>

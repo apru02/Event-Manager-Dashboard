@@ -30,7 +30,12 @@ const EventsMeet = (props) => {
   };
   return (
     <>
-      <div className="groupname">
+      <div
+        className="groupname"
+        style={
+          props.darkTheme === "DarkTheme" ? { backgroundColor: "#202c33" } : {}
+        }
+      >
         <h1
           style={{
             fontSize: "30px",
@@ -38,7 +43,7 @@ const EventsMeet = (props) => {
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            width: "40vh",
+            width: "48vh",
           }}
         >
           {props.event.title}
@@ -48,12 +53,21 @@ const EventsMeet = (props) => {
           onClick={() => {
             setShowcreatemeet(!showcreatemeet);
           }}
+          style={
+            props.darkTheme === "DarkTheme"
+              ? { filter: "invert(100%)", backgroundColor: "#393c4b" }
+              : { filter: "invert(0%)" }
+          }
         >
           <img
             src={meeticon}
             className="eventicons"
-            style={{ width: "35px" }}
             alt=""
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)", width: "35px" }
+                : { filter: "invert(0%)", width: "35px" }
+            }
           />
           <p style={{ marginBottom: "0rem" }}> New Meet</p>
         </button>
@@ -62,9 +76,24 @@ const EventsMeet = (props) => {
       {!showcreatemeet && (
         <div className="meetings">
           <div className="meetingslist">
+            {meetings.length === 0 && (
+              <h3
+                style={
+                  props.darkTheme === "DarkTheme"
+                    ? { color: "white" }
+                    : { color: "black" }
+                }
+              >
+                No Meets Created
+              </h3>
+            )}
             {meetings.map((meeting) => {
               return (
-                <div className="meeting">
+                <div
+                  className={`meeting ${
+                    props.darkTheme === "DarkTheme" ? "meetingDark" : ""
+                  }`}
+                >
                   <h4>{meeting.title}</h4>
                   <p>Event : {meeting.event_name}</p>
                   <p>

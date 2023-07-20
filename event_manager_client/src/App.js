@@ -8,17 +8,30 @@ import SigninComponent from "./components/Login";
 import EventState from "./Context/EventState";
 import UpdateAccount from "./components/UpdateAccount";
 import Alert from "./components/Alert";
+import { useEffect } from "react";
 import { useState } from "react";
+import {gapi} from 'gapi-script';
 
 //import { useNavigate } from "react-router-dom";
 function App() {
   //const navigate = useNavigate();
   // const token = localStorage.getItem("token");
-
+  const client_id ="154737886462-ef9cneipqh5p0j4pe561h1ofhmt1lpps.apps.googleusercontent.com";
   const [showchat, setShowchat] = useState(false);
   const [showMeets, setShowMeets] = useState(false);
   const [currentEvent, setCurrentEvent] = useState([]);
   const [showEventMeet, setShowEventMeet] = useState(false);
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId : client_id,
+        scope :""
+      })
+    };
+    gapi.load('client:auth2',start);
+  },[]);
+
   const handleEventmeetsClick = () => {
     if (showEventMeet === false) {
       setShowEventMeet(true);
@@ -78,7 +91,10 @@ function App() {
   const setType1 = (value) => {
     setType(value);
   };
-
+  const [darkTheme, setDarkTheme] = useState("");
+  const setDarkTheme1 = (value) => {
+    setDarkTheme(value);
+  };
   return (
     <>
       <EventState>
@@ -98,6 +114,8 @@ function App() {
                     setShowAlert1={setShowAlert1}
                     setMessage1={setMessage1}
                     setType1={setType1}
+                    setDarkTheme1={setDarkTheme1}
+                    darkTheme={darkTheme}
                   />
                   <Profile
                     showchat={showchat}
@@ -109,6 +127,7 @@ function App() {
                     setShowAlert1={setShowAlert1}
                     setMessage1={setMessage1}
                     setType1={setType1}
+                    darkTheme={darkTheme}
                   />
                 </div>
               }

@@ -77,7 +77,7 @@
 
 .navbar {
   display: flex;
-  padding: 0px 17px 0px 9px;
+  padding: 24px 17px 0px 9px;
 }
 
 .events_mode {
@@ -175,13 +175,12 @@
 
 
 .search_icon {
-  position: absolute;
-  top: 50%;
-  right: 28px;
-  transform: translateY(-50%);
+  position: relative;
+
+  right: 42px;
+
   width: 32px;
-  /* height: 20px; */
-  background-size: cover;
+
 }
 
 .switch {
@@ -400,9 +399,12 @@ input[type="checkbox"]:checked+.slider:before {
 .bellicon {
   margin-right: 10px;
 }
-.mailicon:hover,.bellicon {
+
+.mailicon:hover,
+.bellicon {
   cursor: pointer;
 }
+
 .rightContent {
   display: flex;
   align-items: center;
@@ -493,9 +495,9 @@ hr {
   background-color: transparent;
 }
 
-.calendar-day.active {
+/* .calendar-day.active {
   background-color: #ffffff;
-}
+} */
 
 .calendar-day.selected {
   background-color: #0a9ea2;
@@ -503,6 +505,7 @@ hr {
   font-weight: bold;
   border-radius: 50%;
   width: 47px;
+  margin-left: 7px;
 }
 
 .calendar-day.current-date {
@@ -685,9 +688,10 @@ hr {
   font-size: 16px;
   padding: 10px 15px 22px 15px;
   background: #F0F7F7;
-  margin-left: -250px;
+  margin-left: 177px;
   border-radius: 19px;
   margin-top: 364px;
+  z-index: 10;
 
 }
 
@@ -709,6 +713,10 @@ hr {
   font-weight: 480;
   padding: 10px 5px 14px 5px;
   cursor: pointer;
+}
+
+.dprow:hover {
+  opacity: 0.5;
 }
 
 .ppmain {
@@ -1018,7 +1026,7 @@ hr {
 .chatcomponent h1 {
   margin-bottom: 0rem;
   font-size: 30px;
-  width: 51vh;
+  width: 68vh;
   font-weight: 450;
   white-space: nowrap;
   overflow: hidden;
@@ -1134,11 +1142,13 @@ hr {
 .senticon:hover {
   cursor: pointer;
 }
-.msginbox{
+
+.msginbox {
   display: flex;
   flex-direction: column;
 }
-.chatDate{
+
+.chatDate {
   width: fit-content;
   padding: 6px 9px 6px 9px;
   margin-left: auto;
@@ -1151,6 +1161,7 @@ hr {
   background: #e4e4e4;
   text-align: center;
 }
+
 .meetings {
   padding: 20px;
   padding-bottom: 1px;
@@ -1171,7 +1182,8 @@ hr {
   scrollbar-color: #ccc #f0f0f0;
   flex-direction: column;
 }
-.meetspan{
+
+.meetspan {
   overflow: hidden;
   display: inline-block;
   width: 41vh;
@@ -1179,6 +1191,7 @@ hr {
   vertical-align: bottom;
   white-space: nowrap;
 }
+
 .meetingslist::-webkit-scrollbar {
   width: 8px;
 }
@@ -1251,12 +1264,13 @@ button {
   cursor: pointer;
 }
 
-.dynamicIcons{
+.dynamicIcons {
   display: flex;
   flex-direction: row;
   gap: 20px;
 }
-.meetbtn{
+
+.meetbtn {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -1266,7 +1280,8 @@ button {
   padding: 3px 8px 3px 8px;
   background-color: rgba(77, 193, 166, 0.801);
 }
-.meetbtn:hover{
+
+.meetbtn:hover {
   background-color: rgba(77, 193, 166, 0.973);
   cursor: pointer;
 }
@@ -1284,35 +1299,41 @@ button {
 }
 
 
-.meetform{
+.meetform {
   display: flex;
-    flex-direction: column;
-    /* column-gap: 20px; */
-    row-gap: 17px;
-    align-content: center;
-    align-items: stretch;
+  flex-direction: column;
+  /* column-gap: 20px; */
+  row-gap: 17px;
+  align-content: center;
+  align-items: stretch;
 }
-.createmeet{
+
+.createmeet {
   padding: 10px 15px 10px 15px;
 }
-.meeting-date{
+
+.meeting-date {
   background-color: #f3ee4fd9;
-    border-radius: 50%;
-    width: 46px;
-    margin-left: 8px;
-    padding: 0px;
+  border-radius: 50%;
+  width: 46px;
+  margin-left: 8px;
+  padding: 0px;
 }
-.eventEdit{
+
+.eventEdit {
   background: transparent;
   border: transparent;
 }
-.eventEdit:focus{
+
+.eventEdit:focus {
   outline: none;
 }
-.eventEdit ::placeholder{
+
+.eventEdit ::placeholder {
   font-style: italic;
 }
-.cross{
+
+.cross {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -1322,7 +1343,8 @@ button {
   cursor: pointer;
 
 }
-.alert{
+
+.alert {
   position: absolute;
   width: 100%;
   height: 5vh;
@@ -1333,10 +1355,12 @@ button {
   flex-direction: row;
   gap: 15px;
 }
-.calendarInput{
+
+.calendarInput {
   margin-left: 20px;
 }
-.actionRow{
+
+.actionRow {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -1344,7 +1368,147 @@ button {
   align-content: center;
   justify-content: space-between;
 }
-.editIcon:hover{
+
+.editIcon:hover {
   cursor: pointer;
   opacity: 0.6;
+}
+
+.DarkTheme {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+
+
+.dark_mode {
+  cursor: pointer;
+}
+
+.card-dark-mode {
+  background-color: #2a2a2a;
+  color: #FFFFFF;
+  box-shadow: -2px 5px 16px #000000;
+}
+
+.card-dark-mode:hover {
+  /* Apply the scaling transformation on hover */
+  background-color: #363636;
+}
+
+.meetingDark {
+  background-color: #363636;
+  color: #ffffff;
+}
+
+.meetingDark:hover {
+  background-color: #2a2a2a;
+}
+
+.dark_part2 {
+  background-color: #292929;
+  color: #ffffff;
+}
+
+.taskdarkrow {
+  display: flex;
+  flex-direction: row;
+  padding: 3px 5px 3px 17px;
+  align-items: center;
+  gap: 20px;
+}
+
+.taskdarkrow:hover {
+  background-color: #3f3f3f;
+}
+
+.collabdark:hover {
+  background-color: #3f3f3f;
+}
+.search_prompt{
+  position: absolute;
+    color: black;
+    top: 91px;
+    border-radius: 10px;
+    left: 610px;
+    overflow:auto;
+    max-height: 30vh;
+    width: 49vh;
+    background: #ffffff;
+    z-index: 100;
+    display: flex;
+    padding: 10px;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc #f0f0f0;
+}
+
+
+.search_prompt::-webkit-scrollbar {
+  width: 8px;
+}
+
+.search_prompt::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+}
+
+.search_prompt::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.search_prompt::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+.search_prompt::-webkit-scrollbar-corner {
+  background-color: #f0f0f0;
+}
+.searched_event{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2px;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.searched_event:hover{
+  background-color: #f0f0f0;
+}
+.searched_event_dark:hover{
+  background-color: #3f3f3f;
+}
+.adminSelectbox__collaborator{
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  gap: 20px;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* SignUpPage.css */
+.google-signin-button {
+  background-color: #fff;
+  color: #757575;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 4px;
+  position: absolute;
+  /* margin-bottom: -320px; */
+  bottom: -6px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+/* Style the button on hover */
+.google-signin-button:hover {
+  background-color: #f1f1f1;
 }

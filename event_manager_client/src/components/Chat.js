@@ -119,8 +119,14 @@ const Chat = (props) => {
 
   return (
     <div className="chatcomponent">
-      <div className="groupname">
-        <h1>{event.title}</h1>
+      <div className="groupname" style={
+            props.darkTheme === "DarkTheme" ? { backgroundColor: "#202c33" } : {}
+          }>
+        <h1
+          
+        >
+          {event.title}
+        </h1>
       </div>
       <div className="chatcontent" ref={chatContentRef} onScroll={handleScroll}>
         {formattedChats.length > 0 ? (
@@ -129,13 +135,21 @@ const Chat = (props) => {
               chat={chat}
               user={curruser}
               key={`message-${index}`}
+              darkTheme={props.darkTheme}
             />
           ))
         ) : (
           <p>No chats to show</p>
         )}
       </div>
-      <div className="inputmsgrow">
+      <div
+        className="inputmsgrow"
+        style={
+          props.darkTheme === "DarkTheme"
+            ? { backgroundColor: "#202c33", boxShadow: "none" }
+            : {}
+        }
+      >
         <input
           type="text"
           className="inputmsg"
@@ -147,13 +161,22 @@ const Chat = (props) => {
               onsendmessage(e);
             }
           }}
+          style={
+            props.darkTheme === "DarkTheme"
+              ? { backgroundColor: "#2a3942", color: "white" }
+              : {}
+          }
         />
         <img
           src={sendicon}
-          style={{ width: "30px" }}
           className="senticon"
           onClick={onsendmessage}
           alt=""
+          style={
+            props.darkTheme === "DarkTheme"
+              ? { filter: "invert(1)", width: "30px" }
+              : { width: "30px" }
+          }
         />
       </div>
     </div>

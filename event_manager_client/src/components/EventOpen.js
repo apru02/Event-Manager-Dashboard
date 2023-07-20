@@ -8,7 +8,9 @@ import edit from "./logos/edit.png";
 import addtaskicon from "./logos/to-do-list.png";
 import meeticon from "./logos/video-camera.png";
 import calendarIcon from "./logos/calendar.png";
+import { useRef } from "react";
 import "../App.css";
+import ExitModal from "./ExitModal";
 
 const EventOpen = (props) => {
   const host = "http://localhost:5000";
@@ -17,6 +19,13 @@ const EventOpen = (props) => {
   const [tasks, setTasks] = useState(props.event.tasks);
   const [task_completed, setTask_completed] = useState(0);
   const [enableSave, setEnableSave] = useState(false);
+  const [enableDelete, setEnableDelete] = useState(false);
+  const [enableFinalExit, setEnableFinalExit] = useState(true);
+  const [admin, setAdmin] = useState(props.event.admin);
+
+  const [collaborators, setCollaborators] = useState(props.event.collaborators);
+  const modalRef = useRef(null);
+  const backbtn = useRef(null);
   useEffect(() => {
     const fetchUser = async () => {
       const response = await fetch(`${host}/api/auth/getuser`, {
@@ -36,6 +45,11 @@ const EventOpen = (props) => {
         photo: json.photo,
       };
       setUser(user);
+      if (user.id === props.event.admin) {
+        setEnableDelete(true);
+        console.log(admin);
+        console.log(user.id);
+      }
     };
     const completedtasks = () => {
       let count = 0;
@@ -49,6 +63,9 @@ const EventOpen = (props) => {
     if (authtoken) {
       fetchUser();
       completedtasks();
+      if (user.id === props.event.admin && collaborators.length > 1) {
+        setEnableFinalExit(false);
+      }
     }
     // eslint-disable-next-line
   }, [authtoken, tasks]);
@@ -87,7 +104,6 @@ const EventOpen = (props) => {
   const [description, setDescription] = useState(props.event.description);
   const [tags, setTags] = useState(props.event.tags);
 
-  const [collaborators, setCollaborators] = useState(props.event.collaborators);
   const [eventStartDate, setEventStartDate] = useState(
     props.event.eventStartDate
   );
@@ -242,6 +258,7 @@ const EventOpen = (props) => {
             eventStartDate: eventStartDate,
             eventEndDate: eventEndDate,
             tasks: tasks,
+            admin: admin,
           }),
         }
       );
@@ -254,18 +271,232 @@ const EventOpen = (props) => {
           props.setShowAlert1(false);
         }, 2500);
         setEnableSave(false);
+        backbtn.current.click();
       }
     }
   };
+  const handleLeaveEvent = async () => {
+    console.log(user.id);
+    const updatedCollaborators = [];
+    for (let i = 0; i < collaborators.length; i++) {
+      if (collaborators[i]._id !== user.id) {
+        updatedCollaborators.push(collaborators[i]);
+      }
+    }
+    setCollaborators(updatedCollaborators);
+    const response = await fetch(
+      `${host}/api/event/updateevent/${props.event._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          tags: tags,
+          collaborators: updatedCollaborators,
+          eventStartDate: eventStartDate,
+          eventEndDate: eventEndDate,
+          tasks: tasks,
+          admin: admin,
+        }),
+      }
+    );
+    const json = await response.json();
+    if (json.success) {
+      props.setShowAlert1(true);
+      props.setMessage1("You have left the event");
+      props.setType1("success");
+      setTimeout(() => {
+        props.setShowAlert1(false);
+      }, 2500);
+      setEnableSave(false);
+      backbtn.current.click();
+    }
+
+    modalRef.current.click();
+  };
+  const [isExitClicked, setIsExitClicked] = useState(false);
+  const handleDelete = () => {
+    setIsExitClicked(true);
+    setTimeout(() => {
+      setIsExitClicked(false);
+    }, 1000);
+
+  };
+  const handleDeleteEvent = async () => {
+    const response = await fetch(
+      `${host}/api/event/deletevent/${props.event._id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    );
+    const json = await response.json();
+    if (json.success) {
+      props.setShowAlert1(true);
+      props.setMessage1("Event Deleted Successfully");
+      props.setType1("success");
+      setTimeout(() => {
+        props.setShowAlert1(false);
+      }, 2500);
+      setEnableSave(false);
+      backbtn.current.click();
+    }
+  };
+
   return (
     <div className="MyEventOpen">
+      <ExitModal
+        clicked={isExitClicked}
+        handleDeleteEvent={handleDeleteEvent}
+        darkTheme={props.darkTheme}
+      />
+      <button
+        type="button"
+        className="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop"
+        ref={modalRef}
+        style={{ display: "none" }}
+      >
+        Launch static backdrop modal
+      </button>
+
+      <div
+        class="modal fade"
+        id="staticBackdrop"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabIndex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div
+            class="modal-content"
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { backgroundColor: "#363636" }
+                : {}
+            }
+          >
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+                Are You Sure you want to exit from this event?
+              </h1>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div class="modal-body">
+              {user.id === admin && collaborators.length > 1 ? (
+                <>
+                  <h6>
+                    Before Leaving the Group, please assign someone the new
+                    Admin of this Event
+                  </h6>
+                  <div className="adminSelectbox">
+                    {collaborators.map((collaborator) => {
+                      if (collaborator._id !== user.id) {
+                        return (
+                          <div
+                            className="adminSelectbox__collaborator"
+                            key={collaborator._id}
+                          >
+                            <img
+                              className="collabdp"
+                              src={`${host}/uploads/${collaborator.photo}`}
+                              alt=""
+                            />
+                            <h6>{collaborator.name}</h6>
+                            <button
+                              onClick={() => {
+                                setAdmin(collaborator._id);
+                                setEnableFinalExit(true);
+                                props.setMessage1(
+                                  "Now Admin of this Event is " +
+                                    collaborator.name
+                                );
+                                props.setType1("success");
+                                props.setShowAlert1(true);
+                                setTimeout(() => {
+                                  props.setShowAlert1(false);
+                                }, 2500);
+                                //console.log(admin);
+                              }}
+                              style={{
+                                marginBottom: "0rem",
+                                position: "absolute",
+                                right: "24px",
+                              }}
+                              className="btn btn-primary"
+                            >
+                              Make Admin
+                            </button>
+                          </div>
+                        );
+                      } else {
+                        // Return null or an empty element for cases when the condition is not met
+                        return null;
+                      }
+                    })}
+                  </div>
+                </>
+              ) : admin === user.id && collaborators.length === 1 ? (
+                <h6>
+                  You are the only participant of this Event. if You leave this
+                  Event, the Event will be deleted.
+                </h6>
+              ) : (
+                <h6>Click on Leave Event to leave</h6>
+              )}
+            </div>
+
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                disabled={!enableFinalExit}
+                onClick={handleLeaveEvent}
+              >
+                Leave Event
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <span
         onClick={() => {
           props.handleEventsClick(props.event);
           props.handlebackfromevent();
         }}
+        ref={backbtn}
       >
-        <img className="backicon" src={backicon} alt="" />
+        <img
+          className="backicon"
+          src={backicon}
+          alt=""
+          style={
+            props.darkTheme === "DarkTheme" ? { filter: "invert(100%)" } : {}
+          }
+        />
       </span>
       <div className="activetag">
         {props.event.isActive ? (
@@ -278,8 +509,11 @@ const EventOpen = (props) => {
             </p>
           </div>
         ) : (
-          <div className="tag" style={{ backgroundColor: "darkyellow" }}>
-            <p className="tagText" style={{ color: "red", fontWeight: "550" }}>
+          <div className="tag" style={{ backgroundColor: "red" }}>
+            <p
+              className="tagText"
+              style={{ color: "white", fontWeight: "550" }}
+            >
               Inactive
             </p>
           </div>
@@ -312,16 +546,25 @@ const EventOpen = (props) => {
                   handleTitleClick();
                 }
               }}
+              style={props.darkTheme === "DarkTheme" ? { color: "white" } : {}}
               value={title}
               onChange={handleTitleChange}
             />
           )}
           <img
             src={edit}
-            style={{ width: "22px", marginBottom: "31px" }}
             alt=""
             className="eventicons"
             onClick={handleTitleClick}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? {
+                    filter: "invert(100%)",
+                    width: "22px",
+                    marginBottom: "31px",
+                  }
+                : { width: "22px", marginBottom: "31px" }
+            }
           />
         </h1>
         <div className="dynamicIcons">
@@ -329,20 +572,36 @@ const EventOpen = (props) => {
             src={meeticon}
             className="eventicons"
             alt=""
-            style={{ width: "35px" }}
             onClick={props.handleEventmeetsClick}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)", width: "35px" }
+                : { width: "35px" }
+            }
           />
           <img
             src={chaticon}
             className="eventicons"
             alt=""
-            style={{ width: "35px" }}
             onClick={props.handleChatClick}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)", width: "35px" }
+                : { width: "35px" }
+            }
           />
         </div>
       </div>
       <hr
-        style={{ width: "65%", margin: "0 0", border: "1px solid #3d3d3d8f" }}
+        style={
+          props.darkTheme === "DarkTheme"
+            ? {
+                width: "65%",
+                margin: "0 0",
+                border: "1px solid rgb(255 255 255)",
+              }
+            : { width: "65%", margin: "0 0", border: "1px solid #3d3d3d8f" }
+        }
       />
       <form
         className="EventOpenForm"
@@ -359,9 +618,13 @@ const EventOpen = (props) => {
             <img
               src={editicon}
               className="eventicons"
-              style={{ width: "25px" }}
               alt=""
               onClick={handleDescClick}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(100%)", width: "25px" }
+                  : { width: "25px" }
+              }
             />
           </div>
           {!showdesc && <p style={{ marginBottom: "0rem" }}>{description}</p>}
@@ -372,7 +635,11 @@ const EventOpen = (props) => {
               id="exampleInputEmail1"
               aria-describedby="emailHelp"
               value={description}
-              style={{ height: "30vh", width: "100vh" }}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { color: "white", height: "30vh", width: "100vh" }
+                  : { height: "30vh", width: "100vh" }
+              }
               onChange={handleDescChange}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -393,9 +660,13 @@ const EventOpen = (props) => {
             <img
               src={addcollabicon}
               className="eventicons"
-              style={{ width: "25px" }}
               alt=""
               onClick={handleCollabsClick}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(100%)", width: "25px" }
+                  : { width: "25px" }
+              }
             />
           </div>
           <p>
@@ -405,11 +676,20 @@ const EventOpen = (props) => {
           <div>
             {collaborators.map((collaborator) => {
               return (
-                <div className="collabrow">
+                <div
+                  className={`collabrow ${
+                    props.darkTheme === "DarkTheme" ? "collabdark" : ""
+                  }`}
+                >
                   <img
                     className="collabdp"
                     src={`${host}/uploads/${collaborator.photo}`}
                     alt=""
+                    style={
+                      props.darkTheme === "DarkTheme"
+                        ? { boxShadow: "0px 0px 5px 0px #000000" }
+                        : {}
+                    }
                   />
                   <div className="collabinfo">
                     <p
@@ -419,7 +699,7 @@ const EventOpen = (props) => {
                       {collaborator.name}
                       {user.id === collaborator._id ? " (You)" : ""}
                     </p>
-                    {collaborator._id === props.event.admin ? (
+                    {collaborator._id === admin ? (
                       <p
                         style={{
                           marginBottom: "0rem",
@@ -440,7 +720,15 @@ const EventOpen = (props) => {
               <input
                 type="text"
                 className="eventEdit"
-                style={{ border: "2px solid grey", borderRadius: "3px" }}
+                style={
+                  props.darkTheme === "DarkTheme"
+                    ? {
+                        color: "white",
+                        border: "2px solid grey",
+                        borderRadius: "3px",
+                      }
+                    : { border: "2px solid grey", borderRadius: "3px" }
+                }
                 spellCheck="false"
                 onChange={oncollabchange}
                 placeholder="Enter username of the collaborator to be added"
@@ -467,9 +755,13 @@ const EventOpen = (props) => {
             <img
               src={tagicon}
               className="eventicons"
-              style={{ width: "25px" }}
               alt=""
               onClick={handleTagClick}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(100%)", width: "25px" }
+                  : { width: "25px" }
+              }
             />
           </div>
 
@@ -479,7 +771,15 @@ const EventOpen = (props) => {
               <input
                 type="text"
                 class="eventEdit"
-                style={{ border: "1px solid grey", borderRadius: "3px" }}
+                style={
+                  props.darkTheme === "DarkTheme"
+                    ? {
+                        color: "white",
+                        border: "1px solid grey",
+                        borderRadius: "3px",
+                      }
+                    : { border: "1px solid grey", borderRadius: "3px" }
+                }
                 spellCheck="false"
                 onKeyUp={(e) => {
                   if (e.key === "Enter") {
@@ -502,9 +802,13 @@ const EventOpen = (props) => {
             <img
               src={addtaskicon}
               className="eventicons"
-              style={{ width: "25px" }}
               alt=""
               onClick={handleTasksClick}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(100%)", width: "25px" }
+                  : { width: "25px" }
+              }
             />
           </div>
           <div className="taskcontent">
@@ -514,7 +818,12 @@ const EventOpen = (props) => {
               </p>
             ) : (
               tasks.map((task, id) => (
-                <div className="taskrow" key={id}>
+                <div
+                  className={`${
+                    props.darkTheme === "DarkTheme" ? "taskdarkrow" : "taskrow"
+                  }`}
+                  key={id}
+                >
                   <input
                     type="checkbox"
                     style={{ width: "21px", height: "21px" }}
@@ -534,8 +843,12 @@ const EventOpen = (props) => {
                         onClick={() => {
                           setShowTaskrow(!showTaskrow);
                         }}
-                        style={{ width: "15px" }}
                         className="eventicons"
+                        style={
+                          props.darkTheme === "DarkTheme"
+                            ? { filter: "invert(100%)", width: "15px" }
+                            : { width: "15px" }
+                        }
                       />
                     </>
                   ) : (
@@ -543,7 +856,15 @@ const EventOpen = (props) => {
                       type="text"
                       className="eventEdit"
                       value={task.description}
-                      style={{ width: "100%", fontSize: "18px" }}
+                      style={
+                        props.darkTheme === "DarkTheme"
+                          ? {
+                              color: "white",
+                              width: "100%",
+                              fontSize: "18px",
+                            }
+                          : { width: "100%", fontSize: "18px" }
+                      }
                       onChange={(e) => {
                         handleTaskChange(e, task);
                       }}
@@ -565,11 +886,20 @@ const EventOpen = (props) => {
             <input
               type="text"
               className="eventEdit"
-              style={{
-                border: "2px solid grey",
-                borderRadius: "5px",
-                width: "100%",
-              }}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? {
+                      color: "white",
+                      border: "2px solid grey",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }
+                  : {
+                      border: "2px solid grey",
+                      borderRadius: "5px",
+                      width: "100%",
+                    }
+              }
               id="exampleTaskInput"
               aria-describedby="emailHelp"
               onKeyDown={(e) => {
@@ -590,18 +920,39 @@ const EventOpen = (props) => {
             <img
               src={calendarIcon}
               className="eventicons"
-              style={{ width: "25px" }}
               alt=""
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(100%)", width: "25px" }
+                  : { width: "25px" }
+              }
             />
           </div>
           <input
             type="date"
             className="calendarInput eventEdit"
-            style={{ border: "1px solid grey", borderRadius: "3px" }}
             spellCheck="false"
             value={eventStartDate}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? {
+                    color: "white",
+                    border: "1px solid grey",
+                    borderRadius: "3px",
+                    colorScheme: "dark",
+                    padding: "4px",
+                    marginTop: "16px",
+                  }
+                : {
+                    border: "1px solid grey",
+                    borderRadius: "3px",
+                    padding: "4px",
+                    marginTop: "16px",
+                  }
+            }
             onChange={(e) => {
               if (e.target.value <= eventEndDate) {
+                setEnableSave(true);
                 setEventStartDate(e.target.value);
               } else {
                 props.setMessage1("Start date cannot be greater than end date");
@@ -622,18 +973,39 @@ const EventOpen = (props) => {
             <img
               src={calendarIcon}
               className="eventicons"
-              style={{ width: "25px" }}
               alt=""
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(100%)", width: "25px" }
+                  : { width: "25px" }
+              }
             />
           </div>
           <input
             type="date"
             className="calendarInput eventEdit"
-            style={{ border: "1px solid grey", borderRadius: "3px" }}
             spellCheck="false"
             value={eventEndDate}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? {
+                    color: "white",
+                    border: "1px solid grey",
+                    borderRadius: "3px",
+                    colorScheme: "dark",
+                    padding: "4px",
+                    marginTop: "16px",
+                  }
+                : {
+                    border: "1px solid grey",
+                    borderRadius: "3px",
+                    padding: "4px",
+                    marginTop: "16px",
+                  }
+            }
             onChange={(e) => {
               if (e.target.value >= eventStartDate) {
+                setEnableSave(true);
                 setEventEndDate(e.target.value);
               } else {
                 props.setMessage1("End date cannot be less than start date");
@@ -655,15 +1027,22 @@ const EventOpen = (props) => {
             Save Changes
           </button>
           <button
-            className="btn btn-primary"
-            style={{ backgroundColor: "red", color: "white" }}
+            className="exit"
+            id="exit"
+            style={{ backgroundColor: "red", color: "white", border: "none" }}
+            onClick={() => {
+              modalRef.current.click();
+            }}
           >
             {" "}
             Exit From this Event
           </button>
           <button
-            className="btn btn-primary"
-            style={{ backgroundColor: "red", color: "white" }}
+            className="btn btn-primary delete"
+            id="delete"
+            style={{ backgroundColor: "red", color: "white", border: "none" }}
+            disabled={!enableDelete}
+            onClick={handleDelete}
           >
             {" "}
             Delete Event

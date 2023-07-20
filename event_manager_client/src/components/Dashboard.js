@@ -40,49 +40,73 @@ const Dashboard = (props) => {
   const handleChatClick = () => {
     props.handleChatClick();
   };
-  const [Active,setActive]=useState("true");
-  const SetEventStatus = (value) => {  
+  const [Active, setActive] = useState("true");
+  const SetEventStatus = (value) => {
     setActive(value);
   };
   return (
     <>
-      <div className="part1">
-        <Navbar />
+      <div className={`part1 ${props.darkTheme}`}>
+        <Navbar
+          setDarkTheme1={props.setDarkTheme1}
+          darkTheme={props.darkTheme}
+          handleEventsClick={handleEventsClick}
+        />
         {showdashboard && (
           <div className="main_container">
             <h1 className="main_title">Event Dashboard</h1>
-            <EventsNav SetEventStatus = {SetEventStatus}/>
-            <div className="eventsContainer">
-              {!events ? (
-                <div className="noEvents">
-                  <h1>No Events to show</h1>
+            <EventsNav SetEventStatus={SetEventStatus} />
+           
+              {events ? (
+                <div className="eventsContainer">
+                  {events && events.length > 0 ? ( // Check if events exists and is not an empty array
+                    (() => {
+                      const eventsToRender = [];
+                      for (let i = 0; i < events.length; i++) {
+                        const event = events[i];
+                        const eventIsActive =
+                          Active === "true"
+                            ? event.isActive
+                            : Active === "false"
+                            ? !event.isActive
+                            : true;
+                        if (eventIsActive) {
+                          eventsToRender.push(
+                            <EventsCard
+                              key={event._id}
+                              id={event._id}
+                              title={event.title}
+                              startDate={event.eventStartDate}
+                              endDate={event.eventEndDate}
+                              tags={event.tags}
+                              description={event.description}
+                              isActive={event.isActive}
+                              collaborators={event.collaborators}
+                              admin={event.admin}
+                              event={event}
+                              handleEventsClick={handleEventsClick}
+                              changeevent={props.changeevent}
+                              setShowAlert1={props.setShowAlert1}
+                              setMessage1={props.setMessage1}
+                              setType1={props.setType1}
+                              darkTheme={props.darkTheme}
+                            />
+                          );
+                        }
+                      }
+                      return eventsToRender;
+                    })()
+                  ) : (
+                    <div className="noEvents">
+                      <h1>No Events to show</h1>
+                    </div>
+                  )}
                 </div>
               ) : (
-                events.map((event) => (
-                  (Active ==="true" ? event.isActive : (Active === "false" ? !event.isActive : true)) && (
-                    <EventsCard
-                      key={event._id}
-                      id={event._id}
-                      title={event.title}
-                      startDate={event.eventStartDate}
-                      endDate={event.eventEndDate}
-                      tags={event.tags}
-                      description={event.description}
-                      isActive={event.isActive}
-                      collaborators={event.collaborators}
-                      admin={event.admin}
-                      event={event}
-                      handleEventsClick={handleEventsClick}
-                      changeevent={props.changeevent}
-                      setShowAlert1={props.setShowAlert1}
-                      setMessage1={props.setMessage1}
-                      setType1={props.setType1}
-                    />
-                  )
-                ))                
+                <div className="loadingSpinner">Loading...</div> // Fallback while events are being fetched
               )}
             </div>
-          </div>
+       
         )}
         {!showdashboard && (
           <EventOpen
@@ -94,6 +118,7 @@ const Dashboard = (props) => {
             setShowAlert1={props.setShowAlert1}
             setMessage1={props.setMessage1}
             setType1={props.setType1}
+            darkTheme={props.darkTheme}
           />
         )}
       </div>

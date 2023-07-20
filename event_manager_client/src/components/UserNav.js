@@ -61,10 +61,24 @@ const UserNav = (props) => {
             onClick={props.handlemeetclick}
             alt="mail"
             width="36px"
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)" }
+                : { filter: "invert(0%)" }
+            }
           />
         </span>
         <span className="bellicon">
-          <img src={notifications} alt="notis" width="36px" />
+          <img
+            src={notifications}
+            alt="notis"
+            width="36px"
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)" }
+                : { filter: "invert(0%)" }
+            }
+          />
         </span>
       </div>
       <div className="rightContent">
@@ -76,10 +90,11 @@ const UserNav = (props) => {
             className="dp_element"
             style={{ width: "53px", borderRadius: "50%", cursor: "pointer" }}
             onClick={showuserprofile}
+            onBlur={showuserprofile}
           />
-          {show && <Userdetail user={user} id="userdetail" />}
         </span>
       </div>
+          {show && <Userdetail user={user} id="userdetail" darkTheme={props.darkTheme} showuserprofile={showuserprofile}/>}
     </nav>
   );
 };

@@ -11,15 +11,22 @@ const Userdetail = (props) => {
     navigate("/signin");
   };
   const handlenewaccount = () => {
-   // localStorage.removeItem("token");
+    // localStorage.removeItem("token");
     navigate("/signup");
   };
-const handleEditAccount = () => {
+  const handleEditAccount = () => {
     navigate("/editaccount");
-    };
+  };
   const imgsrc = `http://localhost:5000/uploads/${props.user.photo}`;
   return (
-    <div className="userdetail">
+    <div
+      className="userdetail"
+      style={
+        props.darkTheme === "DarkTheme"
+          ? { backgroundColor: "rgb(63 63 63)" }
+          : {}
+      }
+    >
       <div className="pprow1">
         <img
           src={imgsrc}
@@ -27,7 +34,7 @@ const handleEditAccount = () => {
           alt="dp"
           className="dp"
         />
-        <p style={{marginBottom: "0rem"}}>{props.user.name}</p>
+        <p style={{ marginBottom: "0rem" }}>{props.user.name}</p>
       </div>
       <hr />
       <div className="ppmain">
@@ -39,6 +46,11 @@ const handleEditAccount = () => {
             alt="dp"
             className="dp"
             onClick={handleEditAccount}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)" }
+                : { filter: "invert(0%)" }
+            }
           />
           <p onClick={handleEditAccount}>Edit Acocunt Settings</p>
         </div>
@@ -50,6 +62,11 @@ const handleEditAccount = () => {
             alt="dp"
             className="dp"
             onClick={handlelogout}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)" }
+                : { filter: "invert(0%)" }
+            }
           />
           <p onClick={handlelogout}>Log Out</p>
         </div>
@@ -61,6 +78,11 @@ const handleEditAccount = () => {
             alt="dp"
             className="dp"
             onClick={handlenewaccount}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)" }
+                : { filter: "invert(0%)" }
+            }
           />
           <p onClick={handlenewaccount}>Create new account</p>
         </div>

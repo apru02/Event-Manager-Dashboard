@@ -41,7 +41,7 @@ const Message = (props) => {
       >
         <p className="chatUserName">{props.chat.name}</p>
         <p className="chatmsg">{props.chat.message}</p>
-        <p className="chatTime">{msgtime}</p>
+        <p className="chatTime" style={props.darkTheme==="DarkTheme"?{color:"#dedede"}:{}}>{msgtime}</p>
       </div>
     </div>
     </div>

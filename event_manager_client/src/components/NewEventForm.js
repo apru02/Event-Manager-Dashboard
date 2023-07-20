@@ -8,7 +8,7 @@ import { useContext } from "react";
 //import { useNavigate } from "react-router-dom";
 const NewEventForm = (props) => {
   const context = useContext(eventContext);
-  const { addEvent } = context;
+  const { addEvent, getEvents } = context;
   const [tags, setTags] = useState([]);
   const maxTags = 10;
   const [collaborators, setCollaborators] = useState([]);
@@ -122,7 +122,8 @@ const NewEventForm = (props) => {
       eventDetails.eventEndDate,
       collaborators
     );
-    window.location.reload();
+    getEvents();
+    //window.location.reload();
   };
 
   return (
@@ -132,6 +133,11 @@ const NewEventForm = (props) => {
         className="backIcon"
         onClick={props.handlebtnclick}
         alt="back"
+        style={
+          props.darkTheme === "DarkTheme"
+            ? { filter: "invert(1)" }
+            : { filter: "invert(0)" }
+        }
       />
       <h2 style={{ paddingLeft: "28px" }}>Create New event</h2>
       <form className="createEvent" onSubmit={(e) => e.preventDefault()}>
@@ -146,6 +152,11 @@ const NewEventForm = (props) => {
             onChange={onchange}
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { backgroundColor: "#313131", color: "white" }
+                : { backgroundColor: "white", color: "black" }
+            }
           />
         </div>
         <div className="mb-3">
@@ -158,6 +169,11 @@ const NewEventForm = (props) => {
             id="exampleInputPassword1"
             name="description"
             onChange={onchange}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { backgroundColor: "#313131", color: "white" }
+                : { backgroundColor: "white", color: "black" }
+            }
           />
         </div>
         <div className="mb-3">
@@ -170,6 +186,11 @@ const NewEventForm = (props) => {
             id="inputStartDate"
             name="eventStartDate"
             onChange={onchange}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { backgroundColor: "#313131", color: "white" }
+                : { backgroundColor: "white", color: "black" }
+            }
           />
         </div>
         <div className="mb-3">
@@ -182,18 +203,47 @@ const NewEventForm = (props) => {
             id="inputEndDate"
             name="eventEndDate"
             onChange={onchange}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { backgroundColor: "#313131", color: "white" }
+                : { backgroundColor: "white", color: "black" }
+            }
           />
         </div>
-        <div className="wrapper">
+        <div
+          className={`wrapper`}
+          style={
+            props.darkTheme === "DarkTheme"
+              ? { backgroundColor: "rgb(57 57 57)" }
+              : {}
+          }
+        >
           <div className="title">
-            <img src={tagicon} style={{ width: "30px" }} alt="icon" />
+            <img
+              src={tagicon}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(1)", width: "30px" }
+                  : { filter: "invert(0)", width: "30px" }
+              }
+              alt="icon"
+            />
             <h2>Tags</h2>
           </div>
           <div className="content">
             <p>Press enter or add a comma after each tag</p>
             {tags.length > 0 ? <ul>{createTag()}</ul> : " "}
 
-            <input type="text" spellCheck="false" onKeyUp={addTag} />
+            <input
+              type="text"
+              spellCheck="false"
+              onKeyUp={addTag}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { backgroundColor: "#313131", color: "white" }
+                  : { backgroundColor: "white", color: "black" }
+              }
+            />
           </div>
           <div className="details">
             <p>
@@ -202,9 +252,24 @@ const NewEventForm = (props) => {
             <button onClick={removeAllTags}>Remove All</button>
           </div>
         </div>
-        <div className="wrapper">
+        <div
+          className={`wrapper`}
+          style={
+            props.darkTheme === "DarkTheme"
+              ? { backgroundColor: "rgb(57 57 57)" }
+              : {}
+          }
+        >
           <div className="title">
-            <img src={groupicon} style={{ width: "30px" }} alt="icon" />
+            <img
+              src={groupicon}
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { filter: "invert(1)", width: "30px" }
+                  : { filter: "invert(0)", width: "30px" }
+              }
+              alt="icon"
+            />
             <h2>Add Collaborators</h2>
           </div>
           <div className="content">
@@ -228,7 +293,16 @@ const NewEventForm = (props) => {
             )}
 
             <div className="collabinput">
-              <input type="text" spellCheck="false" onChange={oncollabchange} />
+              <input
+                type="text"
+                spellCheck="false"
+                onChange={oncollabchange}
+                style={
+                  props.darkTheme === "DarkTheme"
+                    ? { backgroundColor: "#313131", color: "white" }
+                    : { backgroundColor: "white", color: "black" }
+                }
+              />
 
               {promptdisplay !== "" ? (
                 <li

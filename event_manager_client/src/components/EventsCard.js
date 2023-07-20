@@ -62,7 +62,6 @@ const EventsCard = (props) => {
         props.setType1("success");
 
         setTimeout(() => {
-          
           props.setShowAlert1(false);
         }, 1000);
       }
@@ -70,7 +69,11 @@ const EventsCard = (props) => {
   };
 
   return (
-    <div className="card">
+    <div
+      className={`card ${
+        props.darkTheme === "DarkTheme" ? "card-dark-mode" : ""
+      }`}
+    >
       <div className="firstRow">
         <p className="eventTitle" style={{ marginBottom: "0rem" }}>
           {props.title}
@@ -92,12 +95,12 @@ const EventsCard = (props) => {
       </div>
       <div className="secondRow">
         {props.tags.length <= 3 ? (
-          props.tags.map((tag) => <Tags key={tag} title={tag} />)
+          props.tags.map((tag) => <Tags key={tag} title={tag} darkTheme = {props.darkTheme} />)
         ) : (
           <>
-            <Tags key={props.tags[0]} title={props.tags[0]} />
-            <Tags key={props.tags[1]} title={props.tags[1]} />
-            <Tags key={props.tags[2]} title={props.tags[2]} />
+            <Tags key={props.tags[0]} title={props.tags[0]} darkTheme = {props.darkTheme}/>
+            <Tags key={props.tags[1]} title={props.tags[1]} darkTheme = {props.darkTheme}/>
+            <Tags key={props.tags[2]} title={props.tags[2]} darkTheme = {props.darkTheme}/>
           </>
         )}
       </div>
@@ -155,6 +158,11 @@ const EventsCard = (props) => {
               props.handleEventsClick(props.event);
               props.changeevent(props.event);
             }}
+            style={
+              props.darkTheme === "DarkTheme"
+                ? { filter: "invert(100%)" }
+                : { filter: "invert(0%)" }
+            }
           />
         </span>
       </div>
