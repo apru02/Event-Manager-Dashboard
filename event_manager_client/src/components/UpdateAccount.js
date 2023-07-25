@@ -59,7 +59,7 @@ const UpdateAccount = (props) => {
         props.setShowAlert1(false);
       }, 2000);
       const imageUrl = `http://localhost:5000/uploads/${json.user.photo}`; // Access the updated user object to get the photo property
-      console.log(imageUrl);
+      //console.log(imageUrl);
       setImagesrc(imageUrl);
     }
   };

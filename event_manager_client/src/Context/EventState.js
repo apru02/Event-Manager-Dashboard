@@ -112,7 +112,7 @@ const EventState = (props) => {
       },
     });
     const json = response.json();
-    console.log(json);
+    //console.log(json);
     const newEvents = events.filter((event) => {
       return event._id !== id;
     });
@@ -144,7 +144,7 @@ const EventState = (props) => {
       }),
     });
     const json = await response.json();
-    console.log(json);
+    //console.log(json);
 
     let newEvents = JSON.parse(JSON.stringify(events));
     // Logic to edit in client
