@@ -5,6 +5,7 @@ import classNames from "classnames";
 import "../App.css"; // Import the CSS file
 import mybg from "./logos/20285469_6187456.svg";
 import dp from "./logos/user.png";
+const {host} = require("../env.js");
 const UpdateAccount = (props) => {
   const token = localStorage.getItem("token");
   const [Name, setName] = useState("");
@@ -15,7 +16,7 @@ const UpdateAccount = (props) => {
   
 
   const getuser = async () => {
-    const response = await fetch("http://localhost:5000/api/auth/getuser", {
+    const response = await fetch(`${host}/api/auth/getuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,7 +29,7 @@ const UpdateAccount = (props) => {
     setEmail(json.email);
     setUsername(json.username);
     setUserid(json._id);
-    setImagesrc(`http://localhost:5000/uploads/${json.photo}`);
+    setImagesrc(`${host}/uploads/${json.photo}`);
   };
   useEffect(() => {
     getuser();
@@ -42,7 +43,7 @@ const UpdateAccount = (props) => {
     formData.append("photo", file); // Update the key to "photo" instead of "file"
 
     const response = await fetch(
-      `http://localhost:5000/api/auth/changedp/${userid}`,
+      `${host}/api/auth/changedp/${userid}`,
       {
         method: "PUT",
         body: formData,
@@ -58,7 +59,7 @@ const UpdateAccount = (props) => {
       setTimeout(() => {
         props.setShowAlert1(false);
       }, 2000);
-      const imageUrl = `http://localhost:5000/uploads/${json.user.photo}`; // Access the updated user object to get the photo property
+      const imageUrl = `${host}/uploads/${json.user.photo}`; // Access the updated user object to get the photo property
       //console.log(imageUrl);
       setImagesrc(imageUrl);
     }
@@ -67,7 +68,7 @@ const UpdateAccount = (props) => {
   const updateAcc = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      `http://localhost:5000/api/auth/updateuser/${userid}`,
+      `${host}/api/auth/updateuser/${userid}`,
       {
         method: "PUT",
         headers: {

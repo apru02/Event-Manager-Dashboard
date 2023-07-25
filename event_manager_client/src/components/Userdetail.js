@@ -4,6 +4,7 @@ import logout from "./logos/logout.png";
 import adduser from "./logos/add-user.png";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
+const {host} = require("../env.js");
 const Userdetail = (props) => {
   const navigate = useNavigate();
   const handlelogout = () => {
@@ -17,7 +18,7 @@ const Userdetail = (props) => {
   const handleEditAccount = () => {
     navigate("/editaccount");
   };
-  const imgsrc = `http://localhost:5000/uploads/${props.user.photo}`;
+  const imgsrc = `${host}/uploads/${props.user.photo}`;
   return (
     <div
       className="userdetail"

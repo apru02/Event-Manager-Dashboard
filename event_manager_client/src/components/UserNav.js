@@ -4,6 +4,7 @@ import notifications from "./logos/bell.png";
 import dp from "./logos/user.png";
 import Userdetail from "./Userdetail";
 import "../App.css";
+const {host} = require("../env.js");
 const UserNav = (props) => {
   const authtoken = localStorage.getItem("token");
   const [imagesrc, setImagesrc] = useState("");
@@ -16,7 +17,7 @@ const UserNav = (props) => {
   });
   useEffect(() => {
     const fetchUserImage = async () => {
-      const response = await fetch("http://localhost:5000/api/auth/getuser", {
+      const response = await fetch(`${host}/api/auth/getuser`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,7 +34,7 @@ const UserNav = (props) => {
         photo: json.photo,
       };
       setUser(user);
-      const imageUrl = `http://localhost:5000/uploads/${json.photo}`;
+      const imageUrl = `${host}/uploads/${json.photo}`;
       //console.log(imageUrl);
       setImagesrc(imageUrl);
     };

@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import meeticon from "./logos/video-camera.png";
 import CreateMeet from "./CreateMeet";
+const {host} = require("../env.js");
 const EventsMeet = (props) => {
-  const host = "http://localhost:5000";
+  //const host = "http://localhost:5000";
   const authtoken = localStorage.getItem("token");
   const [meetings, setMeetings] = useState([]);
   const [showcreatemeet, setShowcreatemeet] = useState(false);

@@ -4,7 +4,7 @@ import searchlogo from "./logos/search.png";
 import "../App.css";
 import { useState } from "react";
 import { useRef } from "react";
-
+const {host} = require("../env.js");
 const Navbar = (props) => {
   const togglenavbar = (event) => {
     const clickedItem = event.currentTarget;
@@ -31,7 +31,7 @@ const Navbar = (props) => {
       e.target.style = "filter: invert(0%)";
     }
   };
-  const host = "http://localhost:5000";
+  //const host = "http://localhost:5000";
   const [showsearchpromt, setshowsearchpromt] = useState(false);
   const [searchedEvents, setsearchedEvents] = useState([]);
   const handlesearch = async (e) => {

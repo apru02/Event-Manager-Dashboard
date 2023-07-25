@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import mybg from "./logos/20285469_6187456.svg";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+const {host} = require("../env.js");
 
 const SignupComponent = (props) => {
   const [username, setUsername] = useState("");
@@ -49,7 +49,7 @@ const SignupComponent = (props) => {
     }
     
     // Perform signup logic here, e.g., send the data to the server
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
+    const response = await fetch(`${host}/api/auth/createuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -120,7 +120,7 @@ const SignupComponent = (props) => {
   const handleSignIn = async () => {
     
     // Perform login logic here, e.g., send the data to the server
-    const response = await fetch("http://localhost:5000/api/auth/login", {
+    const response = await fetch(`${host}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

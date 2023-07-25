@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import "../App.css";
 import backicon from "./logos/back.png";
+const {host} = require("../env.js");
 const Meetings = (props) => {
-  const host = "http://localhost:5000";
+  //const host = "http://localhost:5000";
   const authtoken = localStorage.getItem("token");
   const [meetings, setMeetings] = useState([]);
   useEffect(() => {

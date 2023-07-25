@@ -5,6 +5,7 @@ import backicon from "./logos/back.png";
 import groupicon from "./logos/group.png";
 import eventContext from "../Context/EventContext";
 import { useContext } from "react";
+const {host} = require("../env.js");
 //import { useNavigate } from "react-router-dom";
 const NewEventForm = (props) => {
   const context = useContext(eventContext);
@@ -18,7 +19,7 @@ const NewEventForm = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const userSearchPrompt = async () => {
     const response = await fetch(
-      `http://localhost:5000/api/auth/searchuser/${currCollaborator}`,
+      `${host}/api/auth/searchuser/${currCollaborator}`,
       {
         method: "GET",
         headers: {

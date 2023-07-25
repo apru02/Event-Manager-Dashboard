@@ -2,13 +2,13 @@ import React, { useState, useEffect, useContext, useRef } from "react";
 import eventContext from "../Context/EventContext";
 import Message from "./Message";
 import sendicon from "./logos/send.png";
-
+const {host} = require("../env.js");
 const Chat = (props) => {
   const context = useContext(eventContext);
   const { curruser, getUserDetails } = context;
 
   const event = props.event;
-  const host = "http://localhost:5000";
+  //const host = "http://localhost:5000";
   const chatsInitial = [];
   const [mychats, setchats] = useState(chatsInitial);
   const [message, setmessage] = useState("");

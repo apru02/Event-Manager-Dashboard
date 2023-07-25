@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../App.css";
-
+const {host} = require("../env.js");
 const CreateMeet = (props) => {
   const [meetingTitle, setMeetingTitle] = useState("");
   const [meetingDate, setMeetingDate] = useState("");
@@ -30,7 +30,7 @@ const CreateMeet = (props) => {
     const meetduration = meetingDurationToString(meetingDuration);
     const meetDate = convertMeetingDate(meetingDate);
     const event_id = props.event._id;
-    const response = await fetch(`http://localhost:5000/api/meet/addmeeting/${event_id}`, {
+    const response = await fetch(`${host}/api/meet/addmeeting/${event_id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

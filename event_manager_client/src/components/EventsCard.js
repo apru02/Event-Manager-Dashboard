@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "../App.css";
 import Tags from "./Tags";
 import edit from "./logos/pencil-2.png";
-
+const {host} = require("../env.js");
 const EventsCard = (props) => {
-  const host = "http://localhost:5000";
+  //const host = "http://localhost:5000";
   const [user, setUser] = useState({});
   const [isCheck, setIsCheck] = useState(props.isActive);
   const authtoken = localStorage.getItem("token");
@@ -111,11 +111,11 @@ const EventsCard = (props) => {
               <span className="dp" key={collaborator._id}>
                 <img
                   className="dp_element"
-                  src={`http://localhost:5000/uploads/${collaborator.photo}`}
+                  src={`${host}/uploads/${collaborator.photo}`}
                   alt="collabs"
                   onError={(e) => {
                     e.target.src =
-                      "http://localhost:5000/uploads/defaultUpload.png";
+                      `${host}/uploads/defaultUpload.png`;
                   }}
                   width="48px"
                 />
@@ -127,11 +127,11 @@ const EventsCard = (props) => {
                 <span className="dp" key={collaborator._id}>
                   <img
                     className="dp_element"
-                    src={`http://localhost:5000/uploads/${collaborator.photo}`}
+                    src={`${host}/uploads/${collaborator.photo}`}
                     alt="collabs"
                     onError={(e) => {
                       e.target.src =
-                        "http://localhost:5000/uploads/defaultUpload.png";
+                        `${host}/uploads/defaultUpload.png`;
                     }}
                     width="48px"
                   />

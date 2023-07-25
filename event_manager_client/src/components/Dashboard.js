@@ -8,6 +8,7 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import EventOpen from "./EventOpen";
+
 const Dashboard = (props) => {
   const context = useContext(eventContext);
   const { events, getEvents } = context;

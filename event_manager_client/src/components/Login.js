@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 import mybg from "./logos/20285469_6187456.svg";
 import "../App.css";
+const {host} = require("../env.js");
 
 const SigninComponent = (props) => {
   const [username, setUsername] = useState("");
@@ -24,7 +25,7 @@ const SigninComponent = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Perform login logic here, e.g., send the data to the server
-    const response = await fetch("http://localhost:5000/api/auth/login", {
+    const response = await fetch(`${host}/api/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +64,7 @@ const SigninComponent = (props) => {
   const handleSignUp = async () => {
     //e.preventDefault();
     // Perform signup logic here, e.g., send the data to the server
-    const response = await fetch("http://localhost:5000/api/auth/createuser", {
+    const response = await fetch(`${host}/api/auth/createuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

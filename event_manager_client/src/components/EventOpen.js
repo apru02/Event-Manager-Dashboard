@@ -10,10 +10,11 @@ import meeticon from "./logos/video-camera.png";
 import calendarIcon from "./logos/calendar.png";
 import { useRef } from "react";
 import "../App.css";
+const {host} = require("../env.js");
 
 
 const EventOpen = (props) => {
-  const host = "http://localhost:5000";
+  //const host = "http://localhost:5000";
   const authtoken = localStorage.getItem("token");
   const [user, setUser] = useState({});
   const [tasks, setTasks] = useState(props.event.tasks);
