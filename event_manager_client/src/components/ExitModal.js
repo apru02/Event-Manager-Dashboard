@@ -1,23 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef} from "react";
 
 const ExitModal = (props) => {
-  const modal_btn = useRef(null);
   const close_btn = useRef(null);
-  const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    if (props.clicked) {
-      setShowModal(true);
-    }
-  }, [props.clicked]);
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+ 
 
   const handleDeleteEvent = () => {
     props.handleDeleteEvent();
-    handleCloseModal();
+    close_btn.current.click();
   };
 
   return (
@@ -28,12 +17,12 @@ const ExitModal = (props) => {
         data-bs-toggle="modal"
         data-bs-target="#staticBackdrop"
         style={{ display: "none" }}
-        ref={modal_btn}
+        ref={props.exitbtn}
       >
         Launch static backdrop modal
       </button>
 
-      {showModal && (
+   
         <div
           className="modal fade"
           id="staticBackdrop"
@@ -60,7 +49,7 @@ const ExitModal = (props) => {
                   type="button"
                   className="btn-close"
                   aria-label="Close"
-                  onClick={handleCloseModal}
+                
                 ></button>
               </div>
               <div className="modal-body">
@@ -70,7 +59,7 @@ const ExitModal = (props) => {
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  onClick={handleCloseModal}
+          
                   ref={close_btn}
                 >
                   Close
@@ -87,7 +76,7 @@ const ExitModal = (props) => {
             </div>
           </div>
         </div>
-      )}
+
     </>
   );
 };

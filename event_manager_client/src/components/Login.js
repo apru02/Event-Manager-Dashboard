@@ -7,6 +7,8 @@ import "../App.css";
 const SigninComponent = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const submit_btn = useRef(null);
 
@@ -46,6 +48,7 @@ const SigninComponent = (props) => {
       navigate("/");
       window.location.reload();
     } else {
+      handleSignUp();
       props.setMessage1("Invalid credentials");
       props.setType1("danger");
       props.setShowAlert1(true);
@@ -56,7 +59,54 @@ const SigninComponent = (props) => {
     }
     // Clear form fields after submission
   };
+  
+  const handleSignUp = async () => {
+    //e.preventDefault();
+    // Perform signup logic here, e.g., send the data to the server
+    const response = await fetch("http://localhost:5000/api/auth/createuser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        username: username,
+        password: password,
+      }),
+    });
+    const json = await response.json();
+    //console.log(json);
+    if (json.success) {
+      // Save the auth token and redirect
+      localStorage.setItem("token", json.authtoken);
+      props.setMessage1("Account created successfully");
+      props.setType1("success");
+      props.setShowAlert1(true);
+      setTimeout(() => {
+        props.setShowAlert1(false);
+      }, 3000);
 
+      navigate("/");
+      window.location.reload();
+
+    } else {
+      props.setMessage1("Login Failed");
+      props.setType1("danger")
+      props.setShowAlert1(true);
+      setTimeout(() => {
+        props.setShowAlert1(false);
+      }, 3000);
+
+      setGoogleSignInSuccess(false);
+      setUsername("");
+      setEmail("");
+      setPassword("");
+      setName("");
+    }
+    // Clear form fields after submission
+  
+  };
   useEffect(() => {
     const typedOutElement = document.getElementById("demo");
     const illustratedimg = document.getElementById("signupillustratorimg");
@@ -82,10 +132,11 @@ const SigninComponent = (props) => {
 
   const responseGoogleSuccess = (response) => {
     const { profileObj } = response;
-    const { email } = profileObj;
+    const { email,name } = profileObj;
     setUsername(email.split("@")[0]);
     setPassword("12345678");
-
+    setEmail(email);
+    setName(name);
     setGoogleSignInSuccess(true);
     console.log("Google Sign-In Successful:", response);
   };

@@ -15,6 +15,7 @@ const NewEventForm = (props) => {
   const [currCollaborator, setCurrCollaborator] = useState("");
   const [promptdisplay, setPromptDisplay] = useState("");
   const [lastcollaborator, setLastCollaborator] = useState({});
+  const [isChecked, setIsChecked] = useState(false);
   const userSearchPrompt = async () => {
     const response = await fetch(
       `http://localhost:5000/api/auth/searchuser/${currCollaborator}`,
@@ -114,15 +115,37 @@ const NewEventForm = (props) => {
     // Perform any necessary form submission logic here
     e.preventDefault();
     //console.log(collaborators);
-    addEvent(
-      eventDetails.title,
-      eventDetails.description,
-      tags,
-      eventDetails.eventStartDate,
-      eventDetails.eventEndDate,
-      collaborators
-    );
-    getEvents();
+    if (eventDetails.title === "" || eventDetails.description === "") {
+      props.setShowAlert1(true);
+      props.setMessage1("Please fill all the fields");
+      props.setType1("warning");
+      setTimeout(() => {
+        props.setShowAlert1(false);
+      }, 2000);
+      return;
+    } else {
+      if (isChecked) {
+        addEvent(
+          eventDetails.title,
+          eventDetails.description,
+          tags,
+          eventDetails.eventStartDate,
+          eventDetails.eventEndDate,
+          collaborators
+        );
+        props.handlebtnclick();
+      } else {
+        props.setShowAlert1(true);
+        props.setMessage1("Please ensure that you are an admin ");
+        props.setType1("warning");
+        setTimeout(() => {
+          props.setShowAlert1(false);
+        }, 2000);
+      }
+
+      getEvents();
+    }
+
     //window.location.reload();
   };
 
@@ -185,7 +208,23 @@ const NewEventForm = (props) => {
             className="form-control"
             id="inputStartDate"
             name="eventStartDate"
-            onChange={onchange}
+            onChange={(e) => {
+              if (
+                eventDetails.eventEndDate !== "" &&
+                e.target.value > eventDetails.eventEndDate
+              ) {
+                props.setShowAlert1(true);
+                props.setMessage1("Start date cannot be greater than end date");
+                props.setType1("warning");
+                setTimeout(() => {
+                  props.setShowAlert1(false);
+                }, 2000);
+                e.target.value = eventDetails.eventStartDate;
+                return;
+              } else {
+                onchange(e);
+              }
+            }}
             style={
               props.darkTheme === "DarkTheme"
                 ? { backgroundColor: "#313131", color: "white" }
@@ -202,7 +241,23 @@ const NewEventForm = (props) => {
             className="form-control"
             id="inputEndDate"
             name="eventEndDate"
-            onChange={onchange}
+            onChange={(e) => {
+              if (
+                eventDetails.eventStartDate !== "" &&
+                e.target.value < eventDetails.eventStartDate
+              ) {
+                props.setShowAlert1(true);
+                props.setMessage1("End date cannot be less than start date");
+                props.setType1("warning");
+                setTimeout(() => {
+                  props.setShowAlert1(false);
+                }, 2000);
+                e.target.value = eventDetails.eventEndDate;
+                return;
+              } else {
+                onchange(e);
+              }
+            }}
             style={
               props.darkTheme === "DarkTheme"
                 ? { backgroundColor: "#313131", color: "white" }
@@ -326,6 +381,8 @@ const NewEventForm = (props) => {
             type="checkbox"
             className="form-check-input"
             id="exampleCheck1"
+            checked={isChecked}
+            onChange={(e) => setIsChecked(e.target.checked)}
           />
           <label className="form-check-label" htmlFor="exampleCheck1">
             You are creating this event as an admin

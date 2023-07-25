@@ -19,13 +19,13 @@ router.post("/createevent", fetchuser, async (req, res) => {
     } = req.body;
     const userId = req.user.id;
     const user = await User.findById(userId).select("-password");
-    const userCollab ={
-      _id:userId,
-      name:user.name,
-      email:user.email,
-      photo:user.photo,
-      username:user.username,
-    }
+    const userCollab = {
+      _id: userId,
+      name: user.name,
+      email: user.email,
+      photo: user.photo,
+      username: user.username,
+    };
     collaborators.push(userCollab);
 
     const event = new Event({
@@ -69,23 +69,31 @@ router.put("/updateeventstatus/:id", fetchuser, async (req, res) => {
   try {
     let event = await Event.findById(req.params.id);
     if (!event) {
-      return res.status(404).send({success,message:"Not Found"});
+      return res.status(404).send({ success, message: "Not Found" });
     }
     success = true;
     event.isActive = isActive;
     await event.save();
 
-    res.json({success, event });
+    res.json({ success, event });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send({success,message:"Internal Server Error"});
+    res.status(500).send({ success, message: "Internal Server Error" });
   }
 });
 
-
 //Update events
 router.put("/updateevent/:id", fetchuser, async (req, res) => {
-  const { title, description, tags, collaborators,eventStartDate, eventEndDate,tasks,admin } = req.body;
+  const {
+    title,
+    description,
+    tags,
+    collaborators,
+    eventStartDate,
+    eventEndDate,
+    tasks,
+    admin,
+  } = req.body;
   try {
     // Create a newEvent object
     const newEvent = {};
@@ -119,8 +127,7 @@ router.put("/updateevent/:id", fetchuser, async (req, res) => {
     // Find the note to be updated and update it
     let event = await Event.findById(req.params.id);
     if (!event) {
-
-      return res.status(404).send({success,message:"Not Found"});
+      return res.status(404).send({ success, message: "Not Found" });
     }
     success = true;
     event = await Event.findByIdAndUpdate(
@@ -128,14 +135,12 @@ router.put("/updateevent/:id", fetchuser, async (req, res) => {
       { $set: newEvent },
       { new: true }
     );
-    res.json({success, event });
+    res.json({ success, event });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send({success,message:"Internal Server Error"});
+    res.status(500).send({ success, message: "Internal Server Error" });
   }
 });
-
-
 
 // Route: POST /api/createtask/:id
 // Description: Create a new task for an event
@@ -157,7 +162,7 @@ router.post("/createtask/:id", async (req, res) => {
     // Save the updated event
     await event.save();
     res_task = event.tasks[event.tasks.length - 1];
-    res.json({ message: "Task created successfully",res_task });
+    res.json({ message: "Task created successfully", res_task });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: "Internal Server Error" });
@@ -208,7 +213,7 @@ router.delete("/deletevent/:id", fetchuser, async (req, res) => {
     // Find the note to be delete and delete it
     let event = await Event.findById(req.params.id);
     if (!event) {
-      return res.status(404).send({success,"message":"No event found"});
+      return res.status(404).send({ success, message: "No event found" });
     }
 
     // Allow deletion only if user owns this Note
@@ -221,7 +226,7 @@ router.delete("/deletevent/:id", fetchuser, async (req, res) => {
     res.json({ success, event: event });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send({success,"message":"Internal Server Error"});
+    res.status(500).send({ success, message: "Internal Server Error" });
   }
 });
 
@@ -242,5 +247,41 @@ router.get("/searchevent/:search", fetchuser, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+//Route for updating existing collaborators details if they were updated
+
+router.put("/updatecollaborators/:id", fetchuser, async (req, res) => {
+  let success = false;
+  try {
+    const event = await Event.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({success, message: "Event not found" });
+    }
+    const collaborators = event.collaborators;
+    //console.log(collaborators);
+    const newCollaborators = [];
+    for (let i = 0; i < collaborators.length; i++) {
+      const user = await User.findById(collaborators[i]._id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      const newCollaborator = {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        photo: user.photo,
+        username: user.username,
+      };
+      newCollaborators.push(newCollaborator);
+    }
+    event.collaborators = newCollaborators;
+    await event.save();
+    res.status(200).json({ success, newCollaborators });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success, message: "Internal server error" });
+  }
+});
+
 
 module.exports = router;

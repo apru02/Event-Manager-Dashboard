@@ -77,7 +77,7 @@ const Chat = (props) => {
     const json = await response.json();
     if (json.success) {
       setchats(json.chats.chats);
-      console.log(json.chats);
+     // console.log(json.chats);
     } else {
       setchats(chatsInitial);
     }

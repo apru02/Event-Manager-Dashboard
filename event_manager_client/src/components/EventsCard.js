@@ -55,7 +55,7 @@ const EventsCard = (props) => {
         }
       );
       const json = await response.json();
-      console.log(json);
+      //console.log(json);
       if (json.success) {
         props.setShowAlert1(true);
         props.setMessage1("Event status updated successfully");

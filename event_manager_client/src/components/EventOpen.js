@@ -10,7 +10,7 @@ import meeticon from "./logos/video-camera.png";
 import calendarIcon from "./logos/calendar.png";
 import { useRef } from "react";
 import "../App.css";
-import ExitModal from "./ExitModal";
+
 
 const EventOpen = (props) => {
   const host = "http://localhost:5000";
@@ -47,8 +47,8 @@ const EventOpen = (props) => {
       setUser(user);
       if (user.id === props.event.admin) {
         setEnableDelete(true);
-        console.log(admin);
-        console.log(user.id);
+        // console.log(admin);
+        // console.log(user.id);
       }
     };
     const completedtasks = () => {
@@ -60,9 +60,29 @@ const EventOpen = (props) => {
       }
       setTask_completed(count);
     };
+    
+    const updatecollaborators = async () => {
+      const response = await fetch(
+        `${host}/api/event/updatecollaborators/${props.event._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "auth-token": localStorage.getItem("token"),
+          },
+        }
+      );
+      const json = await response.json();
+      if (json.success) {
+        setCollaborators(json.newCollaborators);
+      }
+    };
+
+
     if (authtoken) {
       fetchUser();
       completedtasks();
+      updatecollaborators();
       if (user.id === props.event.admin && collaborators.length > 1) {
         setEnableFinalExit(false);
       }
@@ -129,7 +149,7 @@ const EventOpen = (props) => {
       <li key={index}>
         {tag}{" "}
         <div
-          class="cross"
+          className="cross"
           onClick={() => removeTag(tag)}
           aria-hidden="true"
         ></div>
@@ -275,8 +295,9 @@ const EventOpen = (props) => {
       }
     }
   };
+  const exitbtn = useRef(null);
   const handleLeaveEvent = async () => {
-    console.log(user.id);
+    //console.log(user.id);
     const updatedCollaborators = [];
     for (let i = 0; i < collaborators.length; i++) {
       if (collaborators[i]._id !== user.id) {
@@ -318,14 +339,6 @@ const EventOpen = (props) => {
 
     modalRef.current.click();
   };
-  const [isExitClicked, setIsExitClicked] = useState(false);
-  const handleDelete = () => {
-    setIsExitClicked(true);
-    setTimeout(() => {
-      setIsExitClicked(false);
-    }, 1000);
-
-  };
   const handleDeleteEvent = async () => {
     const response = await fetch(
       `${host}/api/event/deletevent/${props.event._id}`,
@@ -346,17 +359,85 @@ const EventOpen = (props) => {
         props.setShowAlert1(false);
       }, 2500);
       setEnableSave(false);
+
       backbtn.current.click();
     }
+    exitbtn.current.click();
   };
-
+ 
   return (
     <div className="MyEventOpen">
-      <ExitModal
-        clicked={isExitClicked}
+      {/* <ExitModal
         handleDeleteEvent={handleDeleteEvent}
         darkTheme={props.darkTheme}
-      />
+        exitbtn={exitbtn}
+      /> */}
+        <button
+        type="button"
+        className="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop1"
+        style={{ display: "none" }}
+        ref={exitbtn}
+      >
+        Launch static backdrop modal
+      </button>
+
+   
+        <div
+          className="modal fade"
+          id="staticBackdrop1"
+          data-bs-backdrop="static"
+          data-bs-keyboard="false"
+          tabIndex="-1"
+          aria-labelledby="staticBackdropLabel1"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog">
+            <div
+              className="modal-content"
+              style={
+                props.darkTheme === "DarkTheme"
+                  ? { backgroundColor: "#363636" }
+                  : {}
+              }
+            >
+              <div className="modal-header">
+                <h1 className="modal-title fs-5" id="staticBackdropLabel1">
+                  Are you sure you want to delete this event?
+                </h1>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  data-bs-dismiss="modal"
+                ></button>
+              </div>
+              <div className="modal-body">
+                Click Delete Event to delete the Event
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={handleDeleteEvent}
+                  style={{ backgroundColor: "#ff0000" }}
+                >
+                  Delete Event
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
       <button
         type="button"
         className="btn btn-primary"
@@ -369,7 +450,7 @@ const EventOpen = (props) => {
       </button>
 
       <div
-        class="modal fade"
+        className="modal fade"
         id="staticBackdrop"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -377,27 +458,27 @@ const EventOpen = (props) => {
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
+        <div className="modal-dialog">
           <div
-            class="modal-content"
+            className="modal-content"
             style={
               props.darkTheme === "DarkTheme"
                 ? { backgroundColor: "#363636" }
                 : {}
             }
           >
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="staticBackdropLabel">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="staticBackdropLabel">
                 Are You Sure you want to exit from this event?
               </h1>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               {user.id === admin && collaborators.length > 1 ? (
                 <>
                   <h6>
@@ -461,17 +542,17 @@ const EventOpen = (props) => {
               )}
             </div>
 
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
               >
                 Close
               </button>
               <button
                 type="button"
-                class="btn btn-primary"
+                className="btn btn-primary"
                 disabled={!enableFinalExit}
                 onClick={handleLeaveEvent}
               >
@@ -540,7 +621,7 @@ const EventOpen = (props) => {
           {showtitle && (
             <input
               type="text"
-              class="eventEdit"
+              className="eventEdit"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleTitleClick();
@@ -680,6 +761,7 @@ const EventOpen = (props) => {
                   className={`collabrow ${
                     props.darkTheme === "DarkTheme" ? "collabdark" : ""
                   }`}
+                  key={collaborator._id}
                 >
                   <img
                     className="collabdp"
@@ -770,7 +852,7 @@ const EventOpen = (props) => {
             {showtags && (
               <input
                 type="text"
-                class="eventEdit"
+                className="eventEdit"
                 style={
                   props.darkTheme === "DarkTheme"
                     ? {
@@ -1042,7 +1124,9 @@ const EventOpen = (props) => {
             id="delete"
             style={{ backgroundColor: "red", color: "white", border: "none" }}
             disabled={!enableDelete}
-            onClick={handleDelete}
+            onClick={() => {
+              exitbtn.current.click();
+            }}
           >
             {" "}
             Delete Event
