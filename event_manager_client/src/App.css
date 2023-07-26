@@ -1514,37 +1514,51 @@ button {
 }
 
 /* About.css */
-
 .About-page {
   max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  margin: 0px auto;
+  margin-top: 28px;
+  padding: 5px;
   font-family: Arial, sans-serif;
-}
-
-.About-page h1 {
-  text-align: center;
-  font-size: 36px;
-  margin-bottom: 20px;
 }
 
 .about-text {
   text-align: center;
   font-size: 18px;
-  margin-bottom: 10px;
+  margin-bottom: 33px;
 }
 
 .features {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-bottom: 30px;
+  margin-bottom: -4px;
 }
 
-.feature {
+.feature,
+.featureDark {
   flex-basis: 220px;
   text-align: center;
   margin-bottom: 20px;
+  padding-top: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.feature:hover{
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+.featureDark:hover {
+  background-color: #3f3f3f;
+  cursor: pointer;
+}
+
+.featureDark {
+  flex-basis: 220px;
+  text-align: center;
+  margin-bottom: 20px;
+  padding-top: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .icon {
@@ -1556,3 +1570,55 @@ button {
   text-align: center;
   font-size: 18px;
 }
+
+.socialrow {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.social-icon {
+  margin-right: 10px;
+  margin-left: 10px;
+  font-size: 25px;
+  transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: scale(1.2); /* Scale up the icon on hover */
+}
+
+.linkedin-icon {
+  color: #0077b5; /* LinkedIn blue color */
+}
+
+.linkedin-icon:hover {
+  color: white;
+  background-color: #0077b5; /* Add background color on hover */
+  border-radius: 50%; /* Create a circular background */
+}
+
+.instagram-icon {
+  color: #cc2366; /* Purplish color */
+}
+
+.instagram-icon:hover {
+  color: white;
+  background-color: #cc2366; /* Add background color on hover */
+  border-radius: 50%; /* Create a circular background */
+}
+
+.github-icon {
+  color: #990084;
+}
+
+.github-icon:hover {
+  color: white;
+  background-color: #990084; /* Add background color on hover */
+  border-radius: 50%; /* Create a circular background */
+}
+
+/* ... */

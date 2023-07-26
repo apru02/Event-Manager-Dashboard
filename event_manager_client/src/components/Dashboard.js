@@ -67,7 +67,7 @@ const Dashboard = (props) => {
           handleEventsClick={handleEventsClick}
           handleChangeBetweenNavItems={handleChangeBetweenNavItems}
         />
-        {showAbout && (<About />)}
+        {showAbout && (<About darkTheme={props.darkTheme} />)}
         {showdashboard && (
           <div className="main_container">
             <h1 className="main_title">Event Dashboard</h1>
@@ -124,7 +124,7 @@ const Dashboard = (props) => {
             </div>
        
         )}
-        {!showdashboard && (
+        {!showdashboard && !showAbout && (
           <EventOpen
             event={selectedEvent}
             handleEventsClick={handleEventsClick}
