@@ -44,7 +44,7 @@
 
 .part1 {
   width: 1270px;
-  /* height: 100vh; */
+  height: 100vh; 
   /* 100% of viewport height */
   background-color: #F0F7F7;
 }
@@ -53,7 +53,7 @@
   display: flex;
   flex-direction: column;
   width: 650px;
-  /* height: 100vh; */
+  height: 100vh;
   /* 100% of viewport height */
 }
 
@@ -1621,4 +1621,7 @@ button {
   border-radius: 50%; /* Create a circular background */
 }
 
+.newBtn:hover {
+ background-color: #008e93;
+}
 /* ... */

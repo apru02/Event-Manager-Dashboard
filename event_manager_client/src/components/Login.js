@@ -175,7 +175,7 @@ const SigninComponent = (props) => {
         <div className="signup-container">
           <h2>Welcome to Event Manager dashboard!</h2>
           <h5>
-            <Link to="http://localhost:3000/signup">Create an account</Link> or
+            <Link to="/signup">Create an account</Link> or
             log in
           </h5>
           <hr className="signupHR" />
