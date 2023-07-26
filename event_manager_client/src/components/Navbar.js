@@ -4,7 +4,7 @@ import searchlogo from "./logos/search.png";
 import "../App.css";
 import { useState } from "react";
 import { useRef } from "react";
-const {host} = require("../env.js");
+const { host } = require("../env.js");
 const Navbar = (props) => {
   const togglenavbar = (event) => {
     const clickedItem = event.currentTarget;
@@ -71,10 +71,22 @@ const Navbar = (props) => {
         />
       </span>
       <ul className="nav_items">
-        <li className="list_items activated" onClick={togglenavbar}>
+        <li
+          className="list_items activated"
+          onClick={(e) => {
+           togglenavbar(e);
+           props.handleChangeBetweenNavItems("OverView");
+          }}
+        >
           Overview
         </li>
-        <li className="list_items" onClick={togglenavbar}>
+        <li
+          className="list_items"
+          onClick={(e) => {
+            togglenavbar(e);
+           props.handleChangeBetweenNavItems("about");
+          }}
+        >
           About
         </li>
       </ul>
@@ -101,9 +113,7 @@ const Navbar = (props) => {
           alt="search"
           width="40px"
           style={
-            props.darkTheme === "DarkTheme"
-              ? {filter:"invert(100%)" }
-              : {}
+            props.darkTheme === "DarkTheme" ? { filter: "invert(100%)" } : {}
           }
         />
       </div>
@@ -119,7 +129,9 @@ const Navbar = (props) => {
           {searchedEvents.map((event) => {
             return (
               <div
-                className={`searched_event ${props.darkTheme === "DarkTheme"?"searched_event_dark":""}`}
+                className={`searched_event ${
+                  props.darkTheme === "DarkTheme" ? "searched_event_dark" : ""
+                }`}
                 onClick={() => {
                   //props.setEvent(event);
                   search_input.current.value = "";
