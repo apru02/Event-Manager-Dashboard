@@ -8,6 +8,8 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import EventOpen from "./EventOpen";
+import About from "./About";
+
 
 const Dashboard = (props) => {
   const context = useContext(eventContext);
@@ -45,6 +47,17 @@ const Dashboard = (props) => {
   const SetEventStatus = (value) => {
     setActive(value);
   };
+  const [showAbout, setShowAbout] = useState(false);
+  const handleChangeBetweenNavItems = (value) => {
+    if (value === "about") {
+      setShowAbout(true);
+      setShowdashboard(false);
+    } else {
+      setShowAbout(false);
+      setShowdashboard(true);
+    }
+  };
+  
   return (
     <>
       <div className={`part1 ${props.darkTheme}`}>
@@ -52,7 +65,9 @@ const Dashboard = (props) => {
           setDarkTheme1={props.setDarkTheme1}
           darkTheme={props.darkTheme}
           handleEventsClick={handleEventsClick}
+          handleChangeBetweenNavItems={handleChangeBetweenNavItems}
         />
+        {showAbout && (<About />)}
         {showdashboard && (
           <div className="main_container">
             <h1 className="main_title">Event Dashboard</h1>

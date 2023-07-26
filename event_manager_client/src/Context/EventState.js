@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const {host}  = require("../env.js");
 const EventState = (props) => {
   // const host = "http://localhost:5000";
-  console.log(host);
+  //console.log(host);
   const eventsInitial = [];
   const [events, setEvents] = useState(eventsInitial);
   const [curruser, setcurruser] = useState({});// Get user details
